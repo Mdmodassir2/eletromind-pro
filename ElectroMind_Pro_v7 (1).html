@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ElectroMind Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#F0F4FF;--white:#FFFFFF;--surface:#FFFFFF;--surface2:#F8FAFF;--border:#E2E8F8;
+  --primary:#1E3A8A;--primary2:#2563EB;--accent:#F59E0B;--accent2:#FCD34D;
+  --green:#059669;--red:#DC2626;--purple:#7C3AED;--orange:#EA580C;
+  --text:#1E293B;--text2:#475569;--text3:#94A3B8;
+  --shadow:0 2px 12px rgba(30,58,138,.08);--shadow2:0 8px 32px rgba(30,58,138,.15);
+}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+
+/* SPLASH */
+#splash{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1E3A8A,#2563EB,#1D4ED8);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;max-width:430px;margin:0 auto}
+.splash-icon{width:90px;height:90px;background:rgba(255,255,255,.15);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:20px;animation:pulse 2s infinite;border:2px solid rgba(255,255,255,.2)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.splash-title{font-family:'Poppins',sans-serif;font-size:28px;font-weight:800;color:#fff}
+.splash-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px}
+.splash-bar{width:180px;height:4px;background:rgba(255,255,255,.2);border-radius:100px;margin-top:40px;overflow:hidden}
+.splash-fill{height:100%;background:#F59E0B;border-radius:100px;animation:load 2.5s ease forwards}
+@keyframes load{from{width:0}to{width:100%}}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;min-height:100vh;animation:fadeUp .3s ease}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* TOP NAV */
+.topnav{background:var(--white);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;flex-shrink:0;box-shadow:var(--shadow)}
+.back-btn{width:36px;height:36px;border-radius:10px;background:var(--bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--primary);flex-shrink:0;font-weight:700}
+.nav-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--primary)}
+
+/* BODY */
+.body{flex:1;overflow-y:auto;padding:16px 14px 90px}
+
+/* HOME HERO */
+.hero{background:linear-gradient(135deg,#1E3A8A 0%,#2563EB 60%,#3B82F6 100%);padding:28px 20px 60px;position:relative;overflow:hidden;flex-shrink:0}
+.hero::before{content:'⚡';position:absolute;right:-10px;top:-10px;font-size:140px;opacity:.06}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:40px;background:var(--bg);border-radius:70% 70% 0 0/100% 100% 0 0}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);border-radius:100px;padding:5px 12px;font-size:11px;font-weight:700;color:#FCD34D;margin-bottom:16px}
+.hero-row{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.hero-logo{width:54px;height:54px;background:rgba(255,255,255,.15);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid rgba(255,255,255,.2)}
+.hero-title{font-family:'Poppins',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1.1}
+.hero-title span{color:#FCD34D}
+.hero-desc{font-size:12.5px;color:rgba(255,255,255,.65);line-height:1.65;margin-bottom:22px}
+.hero-stats{display:flex;gap:0}
+.stat{flex:1;text-align:center;padding:10px 0;background:rgba(255,255,255,.08);border-radius:12px;margin:0 4px}
+.stat:first-child{margin-left:0}.stat:last-child{margin-right:0}
+.stat-n{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;color:#FCD34D}
+.stat-l{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px}
+
+/* SECTION LABEL */
+.slabel{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:16px 0 8px}
+
+/* MAIN MENU CARDS */
+.menu-card{background:var(--white);border-radius:18px;margin-bottom:12px;cursor:pointer;overflow:hidden;box-shadow:var(--shadow);transition:all .2s;border:1.5px solid var(--border)}
+.menu-card:active{transform:scale(.98)}
+.menu-card-header{padding:18px 18px 14px;display:flex;align-items:center;gap:14px}
+.mc-icon-wrap{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.mc-pro .mc-icon-wrap{background:linear-gradient(135deg,#1E3A8A,#3B82F6)}
+.mc-home .mc-icon-wrap{background:linear-gradient(135deg,#059669,#10B981)}
+.mc-int .mc-icon-wrap{background:linear-gradient(135deg,#7C3AED,#A78BFA)}
+.mc-beg .mc-icon-wrap{background:linear-gradient(135deg,#EA580C,#F97316)}
+.mc-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--primary);margin-bottom:2px}
+.mc-sub{font-size:11.5px;color:var(--text2);line-height:1.4}
+.mc-arr{margin-left:auto;width:30px;height:30px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text3)}
+.mc-footer{padding:10px 18px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:6px;flex-wrap:wrap}
+.mc-tag{background:var(--white);border:1.5px solid var(--border);border-radius:100px;padding:3px 10px;font-size:10px;font-weight:600;color:var(--text2)}
+
+/* SECTION BANNER */
+.sec-banner{border-radius:16px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden}
+.sb-pro{background:linear-gradient(135deg,#1E3A8A,#2563EB)}
+.sb-home{background:linear-gradient(135deg,#065F46,#059669)}
+.sb-int{background:linear-gradient(135deg,#4C1D95,#7C3AED)}
+.sb-beg{background:linear-gradient(135deg,#92400E,#EA580C)}
+.sb-title{font-family:'Poppins',sans-serif;font-size:18px;font-weight:700;color:#fff}
+.sb-sub{font-size:11.5px;color:rgba(255,255,255,.6);margin-top:2px}
+.sb-emoji{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:44px;opacity:.2}
+
+/* TOOL GRID */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.tcard{background:var(--white);border-radius:14px;padding:14px;cursor:pointer;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:all .2s}
+.tcard:active{transform:scale(.97)}
+.tc-icon-box{width:100%;height:80px;border-radius:10px;margin-bottom:9px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.tc-title{font-family:'Poppins',sans-serif;font-size:12.5px;font-weight:700;color:var(--primary);margin-bottom:2px;line-height:1.3}
+.tc-sub{font-size:10px;color:var(--text3);line-height:1.4}
+
+/* FULL CARD */
+.fcard{background:var(--white);border-radius:14px;padding:14px 16px;margin-bottom:8px;cursor:pointer;border:1.5px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;transition:all .2s}
+.fcard:active{transform:scale(.98)}
+.fc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.fc-title{font-family:'Poppins',sans-serif;font-size:13.5px;font-weight:700;color:var(--primary)}
+.fc-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.fc-arr{margin-left:auto;color:var(--text3);font-size:18px}
+
+/* INFO BOXES */
+.ibox{border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12.5px;line-height:1.65;font-weight:500}
+.ib-yellow{background:#FFFBEB;border:1.5px solid #FDE68A;color:#92400E}
+.ib-blue{background:#EFF6FF;border:1.5px solid #BFDBFE;color:#1E40AF}
+.ib-green{background:#ECFDF5;border:1.5px solid #A7F3D0;color:#065F46}
+.ib-red{background:#FEF2F2;border:1.5px solid #FECACA;color:#991B1B}
+.ib-orange{background:#FFF7ED;border:1.5px solid #FED7AA;color:#92400E}
+
+/* ACCORDION */
+.acc{background:var(--white);border:1.5px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;box-shadow:var(--shadow)}
+.acc-q{padding:14px 16px;font-weight:700;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--primary);gap:8px;line-height:1.4}
+.acc-q:hover{background:var(--surface2)}
+.acc-q .arr{width:24px;height:24px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--primary2);flex-shrink:0;font-weight:700}
+.acc-a{padding:0 16px;font-size:12.5px;line-height:1.75;color:var(--text2);max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;background:var(--surface2)}
+.acc-a.open{max-height:800px;padding:12px 16px}
+
+/* TABLE */
+.rtable{width:100%;border-collapse:collapse;background:var(--white);border-radius:12px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:12px;box-shadow:var(--shadow)}
+.rtable th{background:var(--primary);color:#fff;padding:10px 12px;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-align:left}
+.rtable td{padding:10px 12px;font-size:12px;border-bottom:1px solid var(--border);color:var(--text)}
+.rtable tr:last-child td{border-bottom:none}
+.rtable tr:nth-child(even) td{background:var(--surface2)}
+
+/* ROW ITEM */
+.ritem{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.ri-l{font-size:13px;font-weight:700;color:var(--primary)}
+.ri-s{font-size:10.5px;color:var(--text3);margin-top:2px}
+.ri-r{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700}
+
+/* STEP */
+.step{background:var(--white);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;gap:12px;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.step-n{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Poppins',sans-serif}
+.step-t{font-family:'Poppins',sans-serif;font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:3px}
+.step-d{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* TIP CARD */
+.tipcard{background:var(--white);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;gap:12px;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.tip-icon{font-size:24px;flex-shrink:0}
+.tip-t{font-family:'Poppins',sans-serif;font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:3px}
+.tip-d{font-size:12px;color:var(--text2);line-height:1.65}
+
+/* TOOL SVG CARD */
+.tool-svg-card{background:var(--white);border-radius:16px;margin-bottom:12px;overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.tool-svg-header{padding:16px;display:flex;align-items:center;gap:14px}
+.tool-svg-box{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-svg-name{font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--primary);margin-bottom:2px}
+.tool-svg-type{font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:4px}
+.tool-svg-body{padding:0 16px 16px}
+.tool-svg-desc{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:10px}
+.tool-svg-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{background:var(--bg);border:1.5px solid var(--border);border-radius:100px;padding:3px 10px;font-size:10px;font-weight:600;color:var(--text2)}
+.tool-divider{height:1px;background:var(--border);margin:0 16px}
+
+/* INTERVIEW */
+.int-choice{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:18px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);transition:all .2s}
+.int-choice:active{transform:scale(.98)}
+.int-flag{font-size:38px}
+.int-title{font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;color:var(--primary);margin-bottom:3px}
+.int-sub{font-size:11px;color:var(--text2);line-height:1.4}
+.int-arr{margin-left:auto;width:32px;height:32px;border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--primary2)}
+
+/* SUB CHOICE */
+.subchoice{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:15px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:13px;box-shadow:var(--shadow);transition:all .2s}
+.subchoice:active{transform:scale(.98)}
+.sc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sc-dom{background:#ECFDF5}.sc-ind{background:#EFF6FF}
+.sc-title{font-family:'Poppins',sans-serif;font-size:14.5px;font-weight:700;color:var(--primary)}
+.sc-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* QUIZ */
+.qprog{font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600}
+.qbar{height:6px;background:var(--border);border-radius:100px;margin-bottom:16px;overflow:hidden}
+.qfill{height:100%;background:linear-gradient(90deg,var(--primary2),var(--purple));border-radius:100px;transition:width .4s}
+.qq{font-family:'Poppins',sans-serif;font-size:14.5px;font-weight:700;line-height:1.5;margin-bottom:14px;color:var(--primary)}
+.qopt{display:block;width:100%;text-align:left;padding:13px 15px;border:1.5px solid var(--border);border-radius:11px;font-size:12.5px;font-family:'Nunito',sans-serif;font-weight:600;background:var(--white);color:var(--text);cursor:pointer;margin-bottom:8px;transition:all .2s;box-shadow:var(--shadow)}
+.qopt.correct{border-color:var(--green);background:#ECFDF5;color:#065F46}
+.qopt.wrong{border-color:var(--red);background:#FEF2F2;color:#991B1B}
+
+/* BTN */
+.btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;box-shadow:0 4px 15px rgba(30,58,138,.3)}
+.btn2{width:100%;padding:12px;background:var(--white);color:var(--primary);border:1.5px solid var(--border);border-radius:12px;font-size:13px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;margin-top:8px}
+
+/* INPUT */
+.fg{margin-bottom:12px}
+.fg label{font-size:11.5px;font-weight:700;color:var(--text2);display:block;margin-bottom:5px}
+.fg input,.fg select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:'Nunito',sans-serif;background:var(--surface2);color:var(--text);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--primary2);background:#fff}
+
+/* RESULT */
+.result{margin-top:12px;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1.5px solid #BFDBFE;border-radius:12px;padding:14px}
+.res-l{font-size:11px;color:var(--primary2);font-weight:700;margin-bottom:3px}
+.res-v{font-family:'Poppins',sans-serif;font-size:24px;font-weight:800;color:var(--primary)}
+.res-n{font-size:11.5px;color:var(--text2);margin-top:3px}
+
+/* CARD */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,.5);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:24px 24px 0 0;padding:24px 18px 40px;width:100%;max-width:430px;border-top:1px solid var(--border)}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:100px;margin:0 auto 18px}
+.modal-title{font-family:'Poppins',sans-serif;font-size:17px;font-weight:700;text-align:center;color:var(--primary);margin-bottom:16px}
+.modal-item{display:flex;align-items:center;gap:13px;padding:13px 10px;border-radius:12px;cursor:pointer;transition:background .2s}
+.modal-item:hover{background:var(--surface2)}
+.modal-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.modal-text{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--primary)}
+.modal-sub{font-size:11px;color:var(--text2)}
+.modal-close{width:100%;padding:13px;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;font-size:13.5px;font-weight:700;color:var(--text2);cursor:pointer;margin-top:12px;font-family:'Poppins',sans-serif}
+
+/* SALARY */
+.sal-row{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.sal-t{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:var(--primary)}
+.sal-s{font-size:10.5px;color:var(--text3);margin-top:2px}
+.sal-v{font-family:'Poppins',sans-serif;font-size:14px;font-weight:800;color:var(--green)}
+
+/* FLOW BOX */
+.flow-box{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:6px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--shadow)}
+.flow-num{width:32px;height:32px;border-radius:9px;background:var(--primary);color:#fff;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.flow-t{font-family:'Poppins',sans-serif;font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:3px}
+.flow-d{font-size:12px;color:var(--text2);line-height:1.55}
+.flow-arrow{text-align:center;color:var(--primary2);font-size:20px;padding:2px 0;margin-left:8px}
+
+/* AZ CARD */
+.az-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:7px;display:flex;gap:12px;box-shadow:var(--shadow)}
+.az-letter{width:36px;height:36px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
+.az-name{font-family:'Poppins',sans-serif;font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:3px}
+.az-desc{font-size:12px;color:var(--text2);line-height:1.55}
+
+/* WARN */
+.warn{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12.5px;color:#991B1B;line-height:1.6;font-weight:500}
+
+/* EMERGENCY */
+.em-step{border-radius:12px;padding:14px;margin-bottom:8px;display:flex;gap:12px}
+.em-r{background:#FEF2F2;border:1.5px solid #FECACA}
+.em-y{background:#FFFBEB;border:1.5px solid #FDE68A}
+.em-g{background:#ECFDF5;border:1.5px solid #A7F3D0}
+.em-num{font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;flex-shrink:0}
+.em-t{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;margin-bottom:3px}
+.em-d{font-size:12px;line-height:1.55}
+
+/* BEGINNER CARD */
+.beg-card{border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;box-shadow:var(--shadow)}
+.beg-card:active{transform:scale(.98)}
+.beg-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.beg-title{font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:3px}
+.beg-sub{font-size:11.5px;line-height:1.4;opacity:.8}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-icon">⚡</div>
+  <div class="splash-title">ElectroMind Pro</div>
+  <div class="splash-sub">Complete Electrician App</div>
+  <div class="splash-bar"><div class="splash-fill"></div></div>
+  <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,.4)">India 🇮🇳 & Gulf 🌍</div>
+</div>
+
+<!-- MENU MODAL -->
+<div class="modal-overlay" id="menu-modal" onclick="closeMenuOut(event)">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">ElectroMind Pro</div>
+    <div class="modal-item" onclick="shareApp()">
+      <div class="modal-icon" style="background:#EFF6FF">📤</div>
+      <div><div class="modal-text">Share</div><div class="modal-sub">Doston ko bhejo — bilkul free hai</div></div>
+    </div>
+    <div class="modal-item" onclick="go('s-about');closeMenu()">
+      <div class="modal-icon" style="background:#ECFDF5">ℹ️</div>
+      <div><div class="modal-text">App ke Baare Mein</div><div class="modal-sub">Version, features & info</div></div>
+    </div>
+    <button class="modal-close" onclick="closeMenu()">Bandh Karo</button>
+  </div>
+</div>
+
+<!-- ======= HOME ======= -->
+<div class="screen active" id="s0">
+  <div style="background:var(--primary);padding:8px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+    <span style="font-size:11px;color:rgba(255,255,255,.7);font-weight:600">9:41 AM</span>
+    <span style="font-family:Poppins;font-size:12px;font-weight:700;color:#FCD34D">⚡ ElectroMind Pro</span>
+    <span style="font-size:11px;color:rgba(255,255,255,.7)">📶🔋</span>
+  </div>
+  <div style="background:var(--white);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)">
+    <div style="font-family:Poppins;font-size:14px;font-weight:800;color:var(--primary)">⚡ ElectroMind</div>
+    <button onclick="openMenu()" style="width:36px;height:36px;border-radius:10px;background:var(--bg);border:1.5px solid var(--border);font-size:18px;cursor:pointer">⋯</button>
+  </div>
+  <div class="hero">
+    <div class="hero-badge">⚡ COMPLETE ELECTRICIAN APP</div>
+    <div class="hero-row">
+      <div class="hero-logo">⚡</div>
+      <div><div class="hero-title">Electro<span>Mind</span></div><div class="hero-title" style="font-size:18px;color:rgba(255,255,255,.7);font-weight:600">Pro</div></div>
+    </div>
+    <p class="hero-desc">India & Gulf dono ke liye — <strong style="color:#FCD34D">Tools, Reference, Guide & Interview Prep</strong> — sab ek jagah.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Tools</div></div>
+      <div class="stat"><div class="stat-n">200+</div><div class="stat-l">Q&A</div></div>
+      <div class="stat"><div class="stat-n">A-Z</div><div class="stat-l">Materials</div></div>
+      <div class="stat"><div class="stat-n">Free</div><div class="stat-l">Forever</div></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="slabel">Category Chunein</div>
+
+    <div class="menu-card mc-beg" onclick="go('s-beginner')">
+      <div class="menu-card-header">
+        <div class="mc-icon-wrap">🔰</div>
+        <div style="flex:1"><div class="mc-title">Beginner's Guide</div><div class="mc-sub">Bijli kya hai? Bilkul basic se — naye logo ke liye</div></div>
+        <div class="mc-arr">›</div>
+      </div>
+      <div class="mc-footer"><span class="mc-tag">Basic Concepts</span><span class="mc-tag">Simple Hindi</span><span class="mc-tag">Naye Log</span></div>
+    </div>
+
+    <div class="menu-card mc-pro" onclick="go('s-pro')">
+      <div class="menu-card-header">
+        <div class="mc-icon-wrap">🔧</div>
+        <div style="flex:1"><div class="mc-title">Professional Tools</div><div class="mc-sub">Cable, panels, busbar, MCB, RCCB, tips & tricks</div></div>
+        <div class="mc-arr">›</div>
+      </div>
+      <div class="mc-footer"><span class="mc-tag">Cable Sizing</span><span class="mc-tag">MCB/RCCB</span><span class="mc-tag">Panels</span><span class="mc-tag">Tips</span></div>
+    </div>
+
+    <div class="menu-card mc-home" onclick="go('s-home')">
+      <div class="menu-card-header">
+        <div class="mc-icon-wrap">🏠</div>
+        <div style="flex:1"><div class="mc-title">Home Guide</div><div class="mc-sub">Wiring flow, safety, DIY, emergency guide</div></div>
+        <div class="mc-arr">›</div>
+      </div>
+      <div class="mc-footer"><span class="mc-tag">Wiring Flow</span><span class="mc-tag">Switch</span><span class="mc-tag">MCB Reset</span><span class="mc-tag">Safety</span></div>
+    </div>
+
+    <div class="menu-card mc-int" onclick="go('s-int')">
+      <div class="menu-card-header">
+        <div class="mc-icon-wrap">🎯</div>
+        <div style="flex:1"><div class="mc-title">Interview Prep</div><div class="mc-sub">India & Gulf — 200+ Q&A, A-Z materials, mock test</div></div>
+        <div class="mc-arr">›</div>
+      </div>
+      <div class="mc-footer"><span class="mc-tag">🇮🇳 India</span><span class="mc-tag">🌍 Gulf</span><span class="mc-tag">A-Z Materials</span><span class="mc-tag">Mock Test</span></div>
+    </div>
+
+    <div style="text-align:center;font-size:11px;color:var(--text3);padding:12px 0 4px">v7.0 · Made with ❤️ for Electricians</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="screen" id="s-about">
+  <div class="topnav"><button class="back-btn" onclick="go('s0')">←</button><div class="nav-title">App ke Baare Mein</div></div>
+  <div class="body">
+    <div style="text-align:center;padding:20px 0 16px">
+      <div style="width:80px;height:80px;background:linear-gradient(135deg,#1E3A8A,#3B82F6);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 14px">⚡</div>
+      <div style="font-family:Poppins;font-size:22px;font-weight:800;color:var(--primary)">ElectroMind Pro</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px">Version 7.0 — Complete Electrician App</div>
+    </div>
+    <div class="ibox ib-blue">💡 Ye app har electrician ke liye — fresher ho ya experienced. India aur Gulf dono ke liye.</div>
+    <div class="slabel">Features</div>
+    <div class="tipcard"><div class="tip-icon">🔰</div><div><div class="tip-t">Beginner's Guide</div><div class="tip-d">Bilkul basic se — bijli kya hai, wire kya hoti hai. Naye logon ke liye simple Hindi mein.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔧</div><div><div class="tip-t">Professional Tools</div><div class="tip-d">Cable sizing, gland, tray, MCB/RCCB/MCCB, panels, busbar, motor, tips & tricks.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🏠</div><div><div class="tip-t">Home Guide</div><div class="tip-d">Ghar ki wiring flow, switch change, MCB reset. Beginner-friendly.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🎯</div><div><div class="tip-t">Interview Prep</div><div class="tip-d">India & Gulf — Domestic & Industrial — 200+ Q&A, A-Z materials, mock test.</div></div></div>
+    <div class="slabel">App Info</div>
+    <div class="ritem"><div class="ri-l">Version</div><div class="ri-r" style="color:var(--accent)">7.0</div></div>
+    <div class="ritem"><div class="ri-l">Language</div><div class="ri-r" style="color:var(--green)">Hinglish</div></div>
+    <div class="ritem"><div class="ri-l">Standards</div><div class="ri-r" style="color:var(--purple)">IS / IEC / BS</div></div>
+    <div class="ritem"><div class="ri-l">Price</div><div class="ri-r" style="color:var(--green)">100% Free</div></div>
+  </div>
+</div>
+
+<!-- ======= BEGINNER GUIDE ======= -->
+<div class="screen" id="s-beginner">
+  <div class="topnav"><button class="back-btn" onclick="go('s0')">←</button><div class="nav-title">🔰 Beginner's Guide</div></div>
+  <div class="body">
+    <div class="sec-banner sb-beg"><div class="sb-title">Bilkul Basic Se Shuru</div><div class="sb-sub">Naye logo ke liye — simple Hindi mein</div><div class="sb-emoji">🔰</div></div>
+    <div class="ibox ib-orange">👋 Agar aapko bijli ke baare mein bilkul bhi pata nahi — toh ye section aapke liye hai! Koi technical term nahi — bilkul simple bhasha mein.</div>
+
+    <div class="slabel">📚 Basic Concepts</div>
+    <div class="fcard" onclick="go('s-beg-bijli')"><div class="fc-icon" style="background:#FFFBEB">⚡</div><div><div class="fc-title">Bijli Kya Hoti Hai?</div><div class="fc-sub">Electricity ka matlab simple bhasha mein</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-wire')"><div class="fc-icon" style="background:#EFF6FF">🔌</div><div><div class="fc-title">Wire Kya Hoti Hai?</div><div class="fc-sub">Wire ke types aur kaam</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-switch')"><div class="fc-icon" style="background:#ECFDF5">🔘</div><div><div class="fc-title">Switch Kya Hota Hai?</div><div class="fc-sub">Switch kaise kaam karta hai</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-mcb')"><div class="fc-icon" style="background:#FEF2F2">⚡</div><div><div class="fc-title">MCB Kya Hota Hai?</div><div class="fc-sub">Woh box jo trip ho jata hai</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-plug')"><div class="fc-icon" style="background:#F5F3FF">🔌</div><div><div class="fc-title">Plug Kaise Lagayein?</div><div class="fc-sub">Safe plug connection guide</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-safe')"><div class="fc-icon" style="background:#FEF2F2">⚠️</div><div><div class="fc-title">Safe Kaise Rahein?</div><div class="fc-sub">Bijli se bachne ke simple tips</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-electrician')"><div class="fc-icon" style="background:#ECFDF5">👷</div><div><div class="fc-title">Electrician Kab Bulayein?</div><div class="fc-sub">Khud karo ya expert bulao?</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-beg-tools')"><div class="fc-icon" style="background:#FFFBEB">🔧</div><div><div class="fc-title">Basic Tools Kya Chahiye?</div><div class="fc-sub">Ghar mein hone chahiye ye tools</div></div><div class="fc-arr">›</div></div>
+  </div>
+</div>
+
+<!-- BEGINNER SCREENS -->
+<div class="screen" id="s-beg-bijli">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">⚡ Bijli Kya Hoti Hai?</div></div>
+  <div class="body">
+    <div class="ibox ib-orange">⚡ Bilkul simple bhasha mein — koi bhi samajh sakta hai!</div>
+    <div class="tipcard"><div class="tip-icon">💡</div><div><div class="tip-t">Bijli = Electrons ka flow</div><div class="tip-d">Jaise paani pipe mein behta hai — waise hi bijli wire mein behti hai. Is behne ko "Current" kehte hain. Jitna zyada paani bahega, utni zyada bijli.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔋</div><div><div class="tip-t">Voltage Kya Hai?</div><div class="tip-d">Voltage = Pressure. Jaise paani tank mein upar se pressure aata hai — waise hi bijli mein voltage pressure deta hai. India mein ghar mein 230 Volt hoti hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">💧</div><div><div class="tip-t">Current Kya Hai?</div><div class="tip-d">Current = Kitni bijli beh rahi hai. Ampere (A) mein measure hota hai. Jitna bada appliance, utna zyada current lega. Bulb = 0.4A, AC = 8-10A.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚡</div><div><div class="tip-t">AC aur DC Kya Hai?</div><div class="tip-d">AC (Alternating Current) = Ghar mein jo bijli aati hai — aage peeche chalti hai. DC (Direct Current) = Battery mein — ek direction mein chalti hai. Mobile charger AC ko DC mein convert karta hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🏠</div><div><div class="tip-t">Ghar Mein Bijli Kaise Aati Hai?</div><div class="tip-d">Power station → Transformer → Aapke meter → DB panel → Switches → Appliances. Bijli ka safar poora ho jata hai jab current appliance se wapas neutral wire se return karta hai.</div></div></div>
+    <div class="ibox ib-yellow">💡 Yaad rakho: Bijli se pyaar karo — lekin darr ke saath! Hamesha safe rehna.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-wire">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">🔌 Wire Kya Hoti Hai?</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔴</div><div><div class="tip-t">Live Wire (Phase Wire)</div><div class="tip-d">Ye wire bijli lekar aati hai — sabse dangerous. India mein Red color ki hoti hai. Gulf mein Brown color. KABHI BHI haath mat lagao bina test kiye!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚫</div><div><div class="tip-t">Neutral Wire</div><div class="tip-d">Ye wire bijli wapas lekar jati hai. India mein Black ya Blue color. Ye bhi dangerous ho sakti hai — hamesha test karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🟢</div><div><div class="tip-t">Earth Wire (Safety Wire)</div><div class="tip-d">Ye wire safety ke liye hai — agar koi fault ho toh bijli seedha zameen mein chali jati hai aur aapko shock nahi lagta. Green-Yellow color. KABHI mat hatao!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">📏</div><div><div class="tip-t">Wire Size Kya Hoti Hai?</div><div class="tip-d">Wire ki thickness mm² mein hoti hai. 1.5mm² = Lights ke liye (patli). 2.5mm² = Socket ke liye (medium). 4mm² = AC/Geyser ke liye (moti). Jitna bada load, utni moti wire chahiye.</div></div></div>
+    <div class="ibox ib-red">⚠️ Kabhi bhi naked (insulation hataya hua) wire ko haath mat lagao — jaan ja sakti hai!</div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-switch">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">🔘 Switch Kya Hota Hai?</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔘</div><div><div class="tip-t">Switch Ka Kaam</div><div class="tip-d">Switch ek "gate" hai jo Live wire ko kholta aur band karta hai. ON karo — bijli chalti hai. OFF karo — bijli band. Switch hamesha Live wire pe lagta hai — Neutral pe nahi.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">1️⃣</div><div><div class="tip-t">1-Way Switch</div><div class="tip-d">Ek jagah se on/off hota hai. Ghar mein sabse common. Ek switch — ek light ya fan.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">2️⃣</div><div><div class="tip-t">2-Way Switch</div><div class="tip-d">Do jagah se on/off hota hai. Seedhi aur neechli manzil pe — dono jagah se light control karo. Seedhiyon (stairs) ke upar-neeche aam use hota hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔌</div><div><div class="tip-t">Socket (Plug Point)</div><div class="tip-d">Switch nahi hai — hamesha ON rehta hai. Isliye alag switch lagta hai socket ke saath. 5A socket = chhote loads. 15A socket = bade loads jaise AC, geyser.</div></div></div>
+    <div class="ibox ib-yellow">💡 Switch tod ke andar wires mat chhuoo — pehle MCB band karo!</div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-mcb">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">⚡ MCB Kya Hota Hai?</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🛡️</div><div><div class="tip-t">MCB = Miniature Circuit Breaker</div><div class="tip-d">Woh chota sa switch jo automatically trip (band) ho jata hai jab bijli zyada ho jaye ya short circuit ho. Aapki safety ka guardian hai!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔥</div><div><div class="tip-t">MCB Trip Kyun Hota Hai?</div><div class="tip-d">1) Overload — bahut saare appliances ek saath chala liye. 2) Short circuit — koi wire galat jagah touch kar gayi. 3) Faulty appliance — koi ek cheez kharab ho gayi.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔄</div><div><div class="tip-t">MCB Reset Kaise Karein?</div><div class="tip-d">Step 1: Sab appliances band karo. Step 2: MCB lever pura neeche dabao. Step 3: Phir upar karo. Step 4: Ek ek karke appliance on karo — jis pe trip ho woh faulty hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">❓</div><div><div class="tip-t">MCB vs Purana Fuse</div><div class="tip-d">Purana fuse = ek baar jalega toh replace karna padega. MCB = reset ho jata hai. MCB better, safer aur convenient hai. Apne ghar mein MCB lagwao!</div></div></div>
+    <div class="ibox ib-green">✅ MCB trip hona normal hai — ye kaam kar raha hai! Ghabrao mat.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-plug">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">🔌 Plug Kaise Lagayein?</div></div>
+  <div class="body">
+    <div class="warn">⚠️ Pehle socket ka switch OFF karo. Phir plug lagao.</div>
+    <div class="tipcard"><div class="tip-icon">🔌</div><div><div class="tip-t">Plug Lagane Ka Sahi Tarika</div><div class="tip-d">1) Socket switch OFF karo. 2) Plug seedha daalo — force mat lagao. 3) Phir switch ON karo. Kabhi bhi live socket mein haath mat daalo!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚠️</div><div><div class="tip-t">Dangerous Galtiyan Jo Mat Karo</div><div class="tip-d">❌ Ek socket mein bahut saare adapter mat lagao. ❌ Damaged plug mat use karo. ❌ Geele haathon se plug mat lagao. ❌ Wire se khichke plug mat nikalo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">✅</div><div><div class="tip-t">Sahi Tarike Se Plug Nikalna</div><div class="tip-d">Switch OFF karo pehle. Phir plug ke body (plastic part) ko pakad ke nikalo — wire ko kheench ke mat nikalo. Wire damage hoti hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔥</div><div><div class="tip-t">Extension Board Ka Dhyan</div><div class="tip-d">Extension board ek hi circuit pe bahut saara load dal deta hai. Overloading se aag lag sakti hai. Maximum load check karo — zyada mat lagao.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-safe">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">⚠️ Safe Kaise Rahein?</div></div>
+  <div class="body">
+    <div class="ibox ib-red">🚨 Bijli se har saal hazaron log marte hain — sirf thodi si savdhani se ye roka ja sakta hai!</div>
+    <div class="tipcard"><div class="tip-icon">🖐️</div><div><div class="tip-t">Kabhi Haath Mat Lagao</div><div class="tip-d">Kisi bhi wire ya socket mein bina switch off kiye haath mat lagao. Ye sabse basic aur important rule hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">💧</div><div><div class="tip-t">Paani Aur Bijli — Dushman Hain</div><div class="tip-d">Bathroom mein, kitchen mein, baarish mein — extra careful raho. Geele haath + bijli = bahut dangerous combination.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔥</div><div><div class="tip-t">Overloading Se Bachao</div><div class="tip-d">Ek socket mein zyada appliances mat lagao. Agar wire garam ho rahi hai — ye overloading ka sign hai. Fire ho sakti hai!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">👀</div><div><div class="tip-t">In Signs Ko Seriously Lo</div><div class="tip-d">🔴 Bijli ka bill achanak badh gaya. 🔴 Socket ya switch garm lag raha hai. 🔴 Burning smell aa rahi hai. 🔴 Lights dim hoti hain. In sab mein electrician bulao!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🚨</div><div><div class="tip-t">Emergency Mein</div><div class="tip-d">Koi shock lage → PEHLE main switch band karo → Phir help karo. Paani mat dalo! Fire pe CO₂ extinguisher use karo. Emergency: 112.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-electrician">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">👷 Electrician Kab Bulayein?</div></div>
+  <div class="body">
+    <div class="ibox ib-green">✅ Kuch kaam aap khud kar sakte ho — kuch ke liye expert zaroor bulao!</div>
+    <div class="slabel">✅ YE KHUD KAR SAKTE HO</div>
+    <div class="tipcard"><div class="tip-icon">✅</div><div><div class="tip-t">Bulb / Tube Change Karna</div><div class="tip-d">Switch off karo → bulb nikalo → naya lagao → test karo. Simple!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">✅</div><div><div class="tip-t">MCB Reset Karna</div><div class="tip-d">Sab appliances band karo → lever neeche phir upar. Done!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">✅</div><div><div class="tip-t">Plug Repair (Simple)</div><div class="tip-d">Appliance unplug karo → plug kholo → tight karo → band karo.</div></div></div>
+    <div class="slabel">🚫 EXPERT BULAO — KHUD MAT KARO</div>
+    <div class="tipcard"><div class="tip-icon">🚫</div><div><div class="tip-t">Naya Wiring Karna</div><div class="tip-d">Poore ghar ki wiring — ya kisi bhi room mein naya wiring — expert ka kaam hai. Galat wiring se fire ho sakti hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🚫</div><div><div class="tip-t">DB Panel Ka Kaam</div><div class="tip-d">MCB change karna, new circuit add karna — electrician ka kaam. Galat connection se serious accident ho sakta hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🚫</div><div><div class="tip-t">Meter Se Related Kuch Bhi</div><div class="tip-d">Energy meter ke aas paas kuch bhi mat karo — ye bijli board ki property hai. Tamper karna illegal bhi hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🚫</div><div><div class="tip-t">Koi Bhi Burning Smell Ya Spark</div><div class="tip-d">Agar kuch jal raha lage ya spark dikh raha ho — expert bulao TURANT. Ye serious problem hai.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-beg-tools">
+  <div class="topnav"><button class="back-btn" onclick="go('s-beginner')">←</button><div class="nav-title">🔧 Basic Tools</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">🔧 Ye tools har ghar mein hone chahiye — emergency mein kaam aate hain.</div>
+    <div class="tipcard"><div class="tip-icon">🔩</div><div><div class="tip-t">Screwdriver Set</div><div class="tip-d">Flat aur pilla (Phillips) dono. Switch board, plug repair ke liye. Insulated handle hona zaroor — current nahi lagega.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔦</div><div><div class="tip-t">Test Lamp / Neon Tester</div><div class="tip-d">Wire live hai ya nahi — check karne ke liye. ₹30-50 mein milta hai. Kisi bhi kaam se pehle test karo. MUST HAVE!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔦</div><div><div class="tip-t">Torch / Flashlight</div><div class="tip-d">Bijli jate hi andhera — torch kaam aayegi. Phone torch bhi chalega. DB panel dekhnk ke liye zaroor chahiye.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔨</div><div><div class="tip-t">Pliers</div><div class="tip-d">Wire pakadne ke liye. Insulated handle wala lena — metal handle dangerous hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🩹</div><div><div class="tip-t">Electrical Tape</div><div class="tip-d">Bare wire ko cover karne ke liye. Black ya red color. Temporary fix ke liye — permanent solution ke liye electrician bulao.</div></div></div>
+    <div class="ibox ib-yellow">💡 Ye tools ₹200-300 mein aa jate hain — ghar mein zaroor rakho!</div>
+  </div>
+</div>
+
+<!-- ======= PROFESSIONAL TOOLS ======= -->
+<div class="screen" id="s-pro">
+  <div class="topnav"><button class="back-btn" onclick="go('s0')">←</button><div class="nav-title">Professional Tools</div></div>
+  <div class="body">
+    <div class="sec-banner sb-pro"><div class="sb-title">Industrial & Domestic</div><div class="sb-sub">Field-tested electrical reference</div><div class="sb-emoji">🔧</div></div>
+
+    <div class="slabel">⚡ Cable & Wiring</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-ccc')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE)">🔌</div><div class="tc-title">Cable Current Capacity</div><div class="tc-sub">Sahi cable size nikalo</div></div>
+      <div class="tcard" onclick="go('s-gland')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA)">🔩</div><div class="tc-title">Cable Gland Size</div><div class="tc-sub">M16 se M75 reference</div></div>
+      <div class="tcard" onclick="go('s-tray')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">📦</div><div class="tc-title">Cable Tray Size</div><div class="tc-sub">Standard sizes reference</div></div>
+      <div class="tcard" onclick="go('s-conduit')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">🔗</div><div class="tc-title">Conduit Size</div><div class="tc-sub">PVC/GI sizing</div></div>
+    </div>
+
+    <div class="slabel">🛡️ Protective Devices</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-mcb')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">⚡</div><div class="tc-title">MCB Guide</div><div class="tc-sub">Types, ratings, curves</div></div>
+      <div class="tcard" onclick="go('s-rccb')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#6EE7B7)">🛡️</div><div class="tc-title">RCCB / RCB</div><div class="tc-sub">Earth leakage protection</div></div>
+      <div class="tcard" onclick="go('s-mccb')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#93C5FD)">🔲</div><div class="tc-title">MCCB Guide</div><div class="tc-sub">Industrial breakers</div></div>
+      <div class="tcard" onclick="go('s-fuse')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">🔥</div><div class="tc-title">Fuse Types</div><div class="tc-sub">HRC, rewirable types</div></div>
+    </div>
+
+    <div class="slabel">🗄️ Panels & Distribution</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-panels')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">🗄️</div><div class="tc-title">MDB/SMDB/DB</div><div class="tc-sub">Panel hierarchy</div></div>
+      <div class="tcard" onclick="go('s-mcc')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#F5F3FF,#C4B5FD)">🏭</div><div class="tc-title">MCC / PCC</div><div class="tc-sub">Motor & power control</div></div>
+      <div class="tcard" onclick="go('s-busbar')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFFBEB,#FCD34D)">⚙️</div><div class="tc-title">Busbar Reference</div><div class="tc-sub">Size vs current</div></div>
+      <div class="tcard" onclick="go('s-drum')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFF7ED,#FDBA74)">🥁</div><div class="tc-title">Cable Drum Sizes</div><div class="tc-sub">Standard reference</div></div>
+    </div>
+
+    <div class="slabel">🔄 Calculations</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-motor')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">🔄</div><div class="tc-title">Motor Starter</div><div class="tc-sub">DOL, Star-Delta, VFD</div></div>
+      <div class="tcard" onclick="go('s-trafo')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#93C5FD)">🔁</div><div class="tc-title">Transformer KVA</div><div class="tc-sub">KVA calculator</div></div>
+      <div class="tcard" onclick="go('s-ohm')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">📐</div><div class="tc-title">Ohm's Law</div><div class="tc-sub">V, I, R, P calculate</div></div>
+      <div class="tcard" onclick="go('s-pf')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">📊</div><div class="tc-title">Power Factor</div><div class="tc-sub">Capacitor bank size</div></div>
+    </div>
+
+    <div class="slabel">📚 Reference</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-color')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA)">🎨</div><div class="tc-title">Wire Color Codes</div><div class="tc-sub">IS & IEC standards</div></div>
+      <div class="tcard" onclick="go('s-earth')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#6EE7B7)">🌍</div><div class="tc-title">Earthing Guide</div><div class="tc-sub">IS:3043 reference</div></div>
+      <div class="tcard" onclick="go('s-bill')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">📋</div><div class="tc-title">Bill Estimate</div><div class="tc-sub">Job quotation</div></div>
+      <div class="tcard" onclick="go('s-tools-gallery')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">🔨</div><div class="tc-title">Tools Gallery</div><div class="tc-sub">13 tools ki details</div></div>
+    </div>
+
+    <div class="slabel">💡 Tips & Tricks</div>
+    <div class="fcard" onclick="go('s-tips-site')"><div class="fc-icon" style="background:#FFF7ED">🏗️</div><div><div class="fc-title">Site Pe Kaam Ke Shortcuts</div><div class="fc-sub">Field mein time bachane ke tricks</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-tips-wire')"><div class="fc-icon" style="background:#EFF6FF">🔍</div><div><div class="fc-title">Wire Identification Tips</div><div class="fc-sub">Bina label ke wire pehchano</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-tips-fault')"><div class="fc-icon" style="background:#FEF2F2">⚡</div><div><div class="fc-title">Fault Finding Methods</div><div class="fc-sub">Jaldi se fault dhundo</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-tips-panel')"><div class="fc-icon" style="background:#F5F3FF">🗄️</div><div><div class="fc-title">Panel Wiring Tricks</div><div class="fc-sub">Clean & professional panel</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-tips-cable')"><div class="fc-icon" style="background:#ECFDF5">📦</div><div><div class="fc-title">Cable Pulling Tips</div><div class="fc-sub">Bina damage ke cable kheencho</div></div><div class="fc-arr">›</div></div>
+  </div>
+</div>
+
+<!-- TOOLS GALLERY -->
+<div class="screen" id="s-tools-gallery">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">🔨 Tools Gallery</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">🔨 Electrician ke 13 zaroori tools — naam, kaam, use aur safety tips.</div>
+
+    <!-- SCREWDRIVER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="20" y="2" width="4" height="18" rx="2" fill="#1E3A8A"/><rect x="18" y="20" width="8" height="14" rx="1" fill="#F59E0B"/><rect x="20" y="34" width="4" height="8" rx="1" fill="#6B7280"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#EFF6FF;color:#1E3A8A">HAND TOOL</div><div class="tool-svg-name">Screwdriver Set</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Flat aur Phillips (Pilla) dono types zaroori hain. Terminal tighten, switch board, panel wiring ke liye. <strong>Insulated handle hona zaroor — 1000V rated.</strong> Sizes: 3mm, 5mm, 8mm flat; #1, #2 Phillips.</div>
+        <div class="tool-svg-tags"><span class="tag">Domestic</span><span class="tag">Industrial</span><span class="tag">Must Have</span><span class="tag">Panel Wiring</span></div>
+      </div>
+    </div>
+
+    <!-- MULTIMETER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="8" y="6" width="28" height="32" rx="4" fill="#1F2937"/><rect x="10" y="8" width="24" height="12" rx="2" fill="#4ADE80"/><text x="22" y="18" text-anchor="middle" fill="#000" font-size="7" font-weight="bold">230V</text><circle cx="22" cy="30" r="5" fill="#374151" stroke="#6B7280" stroke-width="1"/><rect x="15" y="36" width="4" height="4" rx="1" fill="#EF4444"/><rect x="25" y="36" width="4" height="4" rx="1" fill="#1D4ED8"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FEF2F2;color:#991B1B">MEASURING TOOL</div><div class="tool-svg-name">Digital Multimeter</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Voltage, Current, Resistance, Continuity measure karna. Fault finding ke liye essential. AC/DC voltage, continuity beep, resistance, diode test. <strong>Every electrician ke paas hona chahiye.</strong></div>
+        <div class="tool-svg-tags"><span class="tag">Must Have</span><span class="tag">Fault Finding</span><span class="tag">Industrial</span><span class="tag">Testing</span></div>
+      </div>
+    </div>
+
+    <!-- CLAMP METER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="14" y="14" width="16" height="24" rx="3" fill="#1F2937"/><rect x="16" y="16" width="12" height="8" rx="1" fill="#4ADE80"/><path d="M14 10 Q22 2 30 10 L28 12 Q22 6 16 12 Z" fill="#059669"/><rect x="18" y="38" width="3" height="4" rx="1" fill="#EF4444"/><rect x="23" y="38" width="3" height="4" rx="1" fill="#1D4ED8"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#ECFDF5;color:#065F46">MEASURING TOOL</div><div class="tool-svg-name">Clamp Meter</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Bina circuit todhe current measure karna. Clamp ko wire ke around lagao — reading milti hai. Load balance check karne ke liye industrial mein bahut use hota hai. Circuit band karne ki zaroorat nahi!</div>
+        <div class="tool-svg-tags"><span class="tag">Industrial</span><span class="tag">Load Testing</span><span class="tag">Panel Work</span><span class="tag">Non-contact</span></div>
+      </div>
+    </div>
+
+    <!-- WIRE STRIPPER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><ellipse cx="22" cy="28" rx="10" ry="6" fill="#F59E0B"/><rect x="12" y="24" width="20" height="4" rx="1" fill="#92400E"/><rect x="10" y="10" width="10" height="14" rx="2" fill="#1E3A8A"/><rect x="24" y="10" width="10" height="14" rx="2" fill="#1E3A8A"/><rect x="20" y="6" width="4" height="6" rx="1" fill="#6B7280"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FFFBEB;color:#92400E">HAND TOOL</div><div class="tool-svg-name">Wire Stripper</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Wire ki insulation hatana — conductor ko damage kiye bina. Automatic stripper zyada accurate hota hai. Different size ke holes — <strong>sahi size mein daalo wire</strong> — galat size mein daalne se wire cut ho sakti hai.</div>
+        <div class="tool-svg-tags"><span class="tag">Wiring</span><span class="tag">Termination</span><span class="tag">Must Have</span></div>
+      </div>
+    </div>
+
+    <!-- COMBINATION PLIERS -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><path d="M10 8 L20 20 L22 20 L22 40 L20 40 L20 22 L8 10 Z" fill="#374151"/><path d="M34 8 L24 20 L22 20 L22 40 L24 40 L24 22 L36 10 Z" fill="#374151"/><circle cx="22" cy="20" r="3" fill="#6B7280"/><rect x="10" y="32" width="10" height="8" rx="2" fill="#7C3AED"/><rect x="24" y="32" width="10" height="8" rx="2" fill="#7C3AED"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#F5F3FF;color:#4C1D95">HAND TOOL</div><div class="tool-svg-name">Combination Pliers</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Wire pakadna, modna, kaatna — ek hi tool mein. <strong>Insulated handle zaroor — 1000V rated.</strong> Side cutter se wire kaat sakte hain. Live work ke liye insulated pliers mandatory hai.</div>
+        <div class="tool-svg-tags"><span class="tag">Must Have</span><span class="tag">Safety</span><span class="tag">Domestic</span><span class="tag">Industrial</span></div>
+      </div>
+    </div>
+
+    <!-- NOSE PLIERS -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><path d="M18 4 L20 20 L22 20 L24 4 Z" fill="#374151"/><path d="M16 20 L28 20 L26 38 L18 38 Z" fill="#374151"/><circle cx="22" cy="20" r="3" fill="#6B7280"/><rect x="16" y="30" width="5" height="8" rx="2" fill="#2563EB"/><rect x="23" y="30" width="5" height="8" rx="2" fill="#2563EB"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#EFF6FF;color:#1E40AF">HAND TOOL</div><div class="tool-svg-name">Nose Pliers (Long Nose)</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Tight jagah mein wire pakadna aur modna. Terminal block mein wire dalna. Ring/hook banana wire ke end pe. Panel wiring mein fine work ke liye. Combination pliers se patla aur lamba hota hai.</div>
+        <div class="tool-svg-tags"><span class="tag">Panel Wiring</span><span class="tag">Termination</span><span class="tag">Fine Work</span></div>
+      </div>
+    </div>
+
+    <!-- MULTI PLIERS -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="12" y="6" width="20" height="8" rx="2" fill="#374151"/><rect x="16" y="14" width="12" height="6" rx="1" fill="#6B7280"/><path d="M10 20 L34 20 L32 38 L12 38 Z" fill="#374151"/><rect x="14" y="30" width="6" height="8" rx="2" fill="#059669"/><rect x="24" y="30" width="6" height="8" rx="2" fill="#059669"/><rect x="12" y="8" width="4" height="2" fill="#EF4444"/><rect x="18" y="8" width="4" height="2" fill="#F59E0B"/><rect x="24" y="8" width="4" height="2" fill="#3B82F6"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#ECFDF5;color:#065F46">MULTI TOOL</div><div class="tool-svg-name">Multi Pliers (Multitool)</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Ek hi tool mein bahut saare functions — pliers, cutter, screwdriver, file, knife. Field mein bahut useful — kit mein jagah bachata hai. Leatherman, Gerber popular brands hain.</div>
+        <div class="tool-svg-tags"><span class="tag">Field Work</span><span class="tag">Multi-function</span><span class="tag">Portable</span></div>
+      </div>
+    </div>
+
+    <!-- HAMMER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="8" y="10" width="20" height="10" rx="2" fill="#374151"/><rect x="8" y="10" width="8" height="10" rx="2" fill="#6B7280"/><rect x="20" y="14" width="4" height="26" rx="2" fill="#92400E"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FEF2F2;color:#991B1B">HAND TOOL</div><div class="tool-svg-name">Hammer</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Conduit clips thokna, rawl plug lagana, cable saddle fix karna. Electrical work mein 200-300g claw hammer ya ball pein hammer use hota hai. Wooden handle better grip deta hai.</div>
+        <div class="tool-svg-tags"><span class="tag">Conduit Work</span><span class="tag">Fixing</span><span class="tag">Domestic</span><span class="tag">Industrial</span></div>
+      </div>
+    </div>
+
+    <!-- DRILL MACHINE -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="6" y="16" width="22" height="12" rx="4" fill="#1E3A8A"/><rect x="26" y="19" width="12" height="6" rx="1" fill="#374151"/><rect x="36" y="20" width="4" height="4" rx="1" fill="#6B7280"/><rect x="14" y="28" width="8" height="10" rx="2" fill="#F59E0B"/><circle cx="10" cy="22" r="4" fill="#2563EB"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FFF7ED;color:#92400E">POWER TOOL</div><div class="tool-svg-name">Hammer Drill Machine</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Wall mein conduit ke liye hole karna. Concrete walls ke liye hammer drill mode. <strong>Masonry bits for concrete, HSS bits for metal.</strong> 13mm chuck, 650W+ power achi hoti hai electrical work ke liye.</div>
+        <div class="tool-svg-tags"><span class="tag">Conduit Work</span><span class="tag">Drilling</span><span class="tag">Domestic</span><span class="tag">Industrial</span></div>
+      </div>
+    </div>
+
+    <!-- TEST LAMP -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="16" r="10" fill="#FCD34D" stroke="#F59E0B" stroke-width="2"/><text x="22" y="20" text-anchor="middle" fill="#92400E" font-size="10" font-weight="bold">💡</text><rect x="20" y="26" width="4" height="6" rx="1" fill="#374151"/><line x1="10" y1="40" x2="20" y2="30" stroke="#EF4444" stroke-width="2"/><line x1="34" y1="40" x2="24" y2="30" stroke="#1D4ED8" stroke-width="2"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FFFBEB;color:#92400E">TESTING TOOL</div><div class="tool-svg-name">Test Lamp / Neon Tester</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Wire live hai ya nahi — check karne ke liye. <strong>Kaam shuru karne se pehle HAMESHA test karo.</strong> Neon tester (₹30-50) ya test lamp dono kaam karte hain. Ghar ka sabse important safety tool.</div>
+        <div class="tool-svg-tags"><span class="tag">Safety</span><span class="tag">Must Have</span><span class="tag">Domestic</span><span class="tag">Basic</span></div>
+      </div>
+    </div>
+
+    <!-- MEGGER -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="8" y="8" width="28" height="22" rx="4" fill="#4C1D95"/><rect x="10" y="10" width="24" height="10" rx="2" fill="#7C3AED"/><text x="22" y="18" text-anchor="middle" fill="#FCD34D" font-size="6" font-weight="bold">500V</text><circle cx="22" cy="24" r="3" fill="#A78BFA"/><rect x="12" y="30" width="8" height="12" rx="2" fill="#374151"/><rect x="24" y="30" width="8" height="12" rx="2" fill="#374151"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#F5F3FF;color:#4C1D95">TESTING TOOL</div><div class="tool-svg-name">Insulation Tester (Megger)</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Cable ki insulation quality test karna. 500V ya 1000V DC apply karke resistance measure. <strong>New wiring commission karne se pehle mandatory test.</strong> 1 MΩ se kam = kharab insulation — wiring replace karo.</div>
+        <div class="tool-svg-tags"><span class="tag">Industrial</span><span class="tag">Commissioning</span><span class="tag">Cable Testing</span><span class="tag">Advanced</span></div>
+      </div>
+    </div>
+
+    <!-- MEASUREMENT TAPE -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="8" y="12" width="28" height="20" rx="6" fill="#F59E0B"/><rect x="10" y="14" width="24" height="16" rx="4" fill="#FCD34D"/><rect x="12" y="20" width="20" height="4" rx="1" fill="#FFFBEB"/><rect x="12" y="20" width="4" height="4" fill="#374151"/><rect x="20" y="20" width="4" height="4" fill="#374151"/><rect x="28" y="20" width="4" height="4" fill="#374151"/><rect x="6" y="20" width="4" height="4" rx="1" fill="#374151"/></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#ECFDF5;color:#065F46">MEASURING TOOL</div><div class="tool-svg-name">Measurement Tape</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Cable length measure karna, conduit route plan karna, panel placement measure karna. <strong>Minimum 5 meter tape lena</strong> — 10 meter aur behtar. Steel tape durable hoti hai site pe. Lock feature zaroor ho.</div>
+        <div class="tool-svg-tags"><span class="tag">Must Have</span><span class="tag">Site Work</span><span class="tag">Domestic</span><span class="tag">Industrial</span></div>
+      </div>
+    </div>
+
+    <!-- LOTO LOCK -->
+    <div class="tool-svg-card">
+      <div class="tool-svg-header">
+        <div class="tool-svg-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">
+          <svg width="44" height="44" viewBox="0 0 44 44"><rect x="12" y="20" width="20" height="18" rx="3" fill="#DC2626"/><path d="M16 20 V14 Q22 6 28 14 V20" fill="none" stroke="#374151" stroke-width="3" stroke-linecap="round"/><rect x="19" y="26" width="6" height="6" rx="1" fill="#FEF2F2"/><circle cx="22" cy="29" r="1.5" fill="#DC2626"/><text x="22" y="42" text-anchor="middle" fill="#374151" font-size="6" font-weight="bold">LOTO</text></svg>
+        </div>
+        <div><div class="tool-svg-type" style="background:#FEF2F2;color:#991B1B">SAFETY TOOL</div><div class="tool-svg-name">LOTO Lock Set</div></div>
+      </div>
+      <div class="tool-divider"></div>
+      <div class="tool-svg-body">
+        <div class="tool-svg-desc">Gulf mein <strong>mandatory</strong>. MCB/Isolator ko lock karna — doosra koi on na kar sake. Har electrician ka apna personal padlock hota hai. <strong>Bina LOTO ke Gulf mein koi bhi electrical kaam karna = termination.</strong></div>
+        <div class="tool-svg-tags"><span class="tag">Safety</span><span class="tag">Gulf Mandatory</span><span class="tag">Industrial</span><span class="tag">PTW</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROFESSIONAL SUB SCREENS -->
+<div class="screen" id="s-ccc">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Cable Current Capacity</div></div>
+  <div class="body">
+    <div class="ibox ib-yellow">⚡ IS:1554 / IS:694 ke hisab se current carrying capacity.</div>
+    <div class="card">
+      <div class="fg"><label>Cable Size (mm²)</label><select id="ccc-size"><option value="1.5">1.5 mm²</option><option value="2.5">2.5 mm²</option><option value="4">4 mm²</option><option value="6">6 mm²</option><option value="10">10 mm²</option><option value="16">16 mm²</option><option value="25">25 mm²</option><option value="35">35 mm²</option><option value="50">50 mm²</option><option value="70">70 mm²</option><option value="95">95 mm²</option><option value="120">120 mm²</option><option value="150">150 mm²</option><option value="185">185 mm²</option><option value="240">240 mm²</option></select></div>
+      <div class="fg"><label>Conductor</label><select id="ccc-mat"><option value="cu">Copper (Cu)</option><option value="al">Aluminium (Al)</option></select></div>
+      <div class="fg"><label>Ambient Temp</label><select id="ccc-temp"><option value="1">30°C</option><option value="0.94">35°C</option><option value="0.87">40°C</option><option value="0.79">45°C</option><option value="0.71">50°C</option></select></div>
+      <button class="btn" onclick="calcCCC()">Calculate</button>
+      <div class="result" id="ccc-res" style="display:none"><div class="res-l">Current Carrying Capacity</div><div class="res-v" id="ccc-v"></div><div class="res-n" id="ccc-n"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-gland">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Cable Gland Size</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">🔩 Cable OD dekh ke gland size select karo.</div>
+    <div class="slabel">Metric Glands (M-Type)</div>
+    <table class="rtable"><tr><th>Size</th><th>Cable OD</th><th>Use</th></tr><tr><td><b>M16</b></td><td>4–8 mm</td><td>Control cables</td></tr><tr><td><b>M20</b></td><td>6–12 mm</td><td>Thin power</td></tr><tr><td><b>M25</b></td><td>10–18 mm</td><td>2.5–6 mm²</td></tr><tr><td><b>M32</b></td><td>15–23 mm</td><td>10–16 mm²</td></tr><tr><td><b>M40</b></td><td>20–30 mm</td><td>25–35 mm²</td></tr><tr><td><b>M50</b></td><td>27–38 mm</td><td>50–70 mm²</td></tr><tr><td><b>M63</b></td><td>35–48 mm</td><td>95–120 mm²</td></tr><tr><td><b>M75</b></td><td>45–60 mm</td><td>150–185 mm²</td></tr></table>
+    <div class="slabel">PG Glands</div>
+    <table class="rtable"><tr><th>Size</th><th>Cable OD</th><th>Use</th></tr><tr><td><b>PG7</b></td><td>3–6.5 mm</td><td>Signal</td></tr><tr><td><b>PG9</b></td><td>4–8 mm</td><td>Control</td></tr><tr><td><b>PG11</b></td><td>5–10 mm</td><td>Instrument</td></tr><tr><td><b>PG16</b></td><td>10–14 mm</td><td>Medium</td></tr><tr><td><b>PG21</b></td><td>13–18 mm</td><td>Power</td></tr><tr><td><b>PG29</b></td><td>18–25 mm</td><td>Heavy</td></tr></table>
+    <div class="ibox ib-yellow">💡 SWA cable ke liye Double Compression gland use karo.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-tray">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Cable Tray Size</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">📦 Width × Depth format. IS: 40% fill factor.</div>
+    <table class="rtable"><tr><th>Size (W×D mm)</th><th>Use</th><th>Type</th></tr><tr><td><b>100×50</b></td><td>Light domestic</td><td>Perforated</td></tr><tr><td><b>150×50</b></td><td>Domestic DB</td><td>Perforated</td></tr><tr><td><b>200×50</b></td><td>Light industrial</td><td>Perforated</td></tr><tr><td><b>200×75</b></td><td>Medium power</td><td>Ladder</td></tr><tr><td><b>300×75</b></td><td>Medium industrial</td><td>Ladder</td></tr><tr><td><b>300×100</b></td><td>Main cable route</td><td>Ladder</td></tr><tr><td><b>450×100</b></td><td>Heavy industrial</td><td>Ladder</td></tr><tr><td><b>600×100</b></td><td>Main highway</td><td>Ladder</td></tr><tr><td><b>750×150</b></td><td>Large power runs</td><td>Ladder</td></tr><tr><td><b>900×150</b></td><td>Very large inst.</td><td>Ladder</td></tr></table>
+    <div class="ibox ib-yellow">💡 Power aur data cables alag tray mein rakho.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-conduit">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Conduit Size</div></div>
+  <div class="body">
+    <div class="ritem"><div><div class="ri-l">20 mm</div><div class="ri-s">1–2 wires, lights/switches</div></div><div class="ri-r" style="color:var(--primary2)">Small</div></div>
+    <div class="ritem"><div><div class="ri-l">25 mm</div><div class="ri-s">3–4 wires, sockets</div></div><div class="ri-r" style="color:var(--primary2)">Small</div></div>
+    <div class="ritem"><div><div class="ri-l">32 mm</div><div class="ri-s">4–6 wires, sub-circuits</div></div><div class="ri-r" style="color:var(--green)">Medium</div></div>
+    <div class="ritem"><div><div class="ri-l">40 mm</div><div class="ri-s">Multiple circuits</div></div><div class="ri-r" style="color:var(--green)">Medium</div></div>
+    <div class="ritem"><div><div class="ri-l">50 mm</div><div class="ri-s">Main feeders</div></div><div class="ri-r" style="color:var(--orange)">Large</div></div>
+    <div class="ritem"><div><div class="ri-l">63 mm</div><div class="ri-s">Heavy duty cables</div></div><div class="ri-r" style="color:var(--red)">XL</div></div>
+    <div class="ibox ib-yellow" style="margin-top:10px">💡 Fill factor: 40% max.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-mcb">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">MCB Guide</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon" style="background:#EFF6FF;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--primary2);font-family:Poppins;font-size:16px">B</div><div><div class="tip-t">B-Type — Trip at 3–5×</div><div class="tip-d">Domestic — lights, fans, sockets.</div></div></div>
+    <div class="tipcard"><div class="tip-icon" style="background:#ECFDF5;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--green);font-family:Poppins;font-size:16px">C</div><div><div class="tip-t">C-Type — Trip at 5–10×</div><div class="tip-d">Commercial, AC units, motors.</div></div></div>
+    <div class="tipcard"><div class="tip-icon" style="background:#FFFBEB;border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--orange);font-family:Poppins;font-size:16px">D</div><div><div class="tip-t">D-Type — Trip at 10–20×</div><div class="tip-d">Heavy industrial — large motors.</div></div></div>
+    <div class="slabel">Standard Ratings</div>
+    <table class="rtable"><tr><th>Rating</th><th>Type</th><th>Use</th></tr><tr><td><b>6A</b></td><td>B</td><td>Lights, fans</td></tr><tr><td><b>10A</b></td><td>B</td><td>Sockets</td></tr><tr><td><b>16A</b></td><td>C</td><td>AC, geyser</td></tr><tr><td><b>20A</b></td><td>C</td><td>2T AC, oven</td></tr><tr><td><b>32A</b></td><td>C</td><td>Sub-panel</td></tr><tr><td><b>63A</b></td><td>C/D</td><td>Main DB incomer</td></tr><tr><td><b>100A</b></td><td>D</td><td>Large DB</td></tr></table>
+  </div>
+</div>
+
+<div class="screen" id="s-rccb">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">RCCB / RCB Guide</div></div>
+  <div class="body">
+    <div class="ibox ib-green">🛡️ Earth leakage se insaan aur equipment ko bachata hai.</div>
+    <table class="rtable"><tr><th>Sensitivity</th><th>Use</th><th>Protection</th></tr><tr><td><b>10 mA</b></td><td>Medical / ICU</td><td>Maximum</td></tr><tr><td><b>30 mA</b></td><td>Domestic</td><td>Human life ✓</td></tr><tr><td><b>100 mA</b></td><td>Commercial</td><td>Fire + shock</td></tr><tr><td><b>300 mA</b></td><td>Industrial</td><td>Fire only</td></tr></table>
+    <div class="ritem"><div><div class="ri-l">25A RCCB</div><div class="ri-s">Small flat</div></div><div class="ri-r" style="color:var(--green)">30 mA</div></div>
+    <div class="ritem"><div><div class="ri-l">40A RCCB</div><div class="ri-s">2–3 BHK</div></div><div class="ri-r" style="color:var(--green)">30 mA</div></div>
+    <div class="ritem"><div><div class="ri-l">63A RCCB</div><div class="ri-s">Villa</div></div><div class="ri-r" style="color:var(--orange)">30/100 mA</div></div>
+    <div class="ibox ib-yellow" style="margin-top:8px">💡 Ghar mein hamesha 30mA RCCB lagao.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-mccb">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">MCCB Guide</div></div>
+  <div class="body">
+    <table class="rtable"><tr><th>Feature</th><th>MCB</th><th>MCCB</th></tr><tr><td>Rating</td><td>1A–125A</td><td>100A–1600A</td></tr><tr><td>Trip</td><td>Fixed</td><td>Adjustable</td></tr><tr><td>Breaking</td><td>6–25 kA</td><td>25–200 kA</td></tr><tr><td>Use</td><td>Domestic</td><td>Industrial</td></tr></table>
+    <div class="ritem"><div><div class="ri-l">100A MCCB</div><div class="ri-s">Small factory</div></div><div class="ri-r" style="color:var(--primary2)">25 kA</div></div>
+    <div class="ritem"><div><div class="ri-l">250A MCCB</div><div class="ri-s">Large plant</div></div><div class="ri-r" style="color:var(--green)">50 kA</div></div>
+    <div class="ritem"><div><div class="ri-l">400A MCCB</div><div class="ri-s">Main incomer MDB</div></div><div class="ri-r" style="color:var(--orange)">65 kA</div></div>
+    <div class="ritem"><div><div class="ri-l">630A MCCB</div><div class="ri-s">Large MDB</div></div><div class="ri-r" style="color:var(--red)">85 kA</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-fuse">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Fuse Types</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔥</div><div><div class="tip-t">Rewirable Fuse (Kitkat)</div><div class="tip-d">Purana type — ghar mein common. Ab MCB se replace ho raha hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔴</div><div><div class="tip-t">HRC Fuse</div><div class="tip-d">Fast operation. Industrial motors, transformers ke liye.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔵</div><div><div class="tip-t">Cartridge Fuse</div><div class="tip-d">Enclosed design — safe. DB mein use. 2A se 100A ratings.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-panels">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Distribution Panels</div></div>
+  <div class="body">
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center;box-shadow:var(--shadow)">
+      <div style="background:var(--primary);color:#fff;border-radius:8px;padding:8px;font-family:Poppins;font-size:12px;font-weight:700;margin-bottom:5px">HT Panel / Substation (11kV)</div>
+      <div style="color:var(--primary2);font-size:16px;margin:2px 0">↓</div>
+      <div style="background:#1E40AF;color:#fff;border-radius:8px;padding:8px;font-family:Poppins;font-size:12px;font-weight:700;margin-bottom:5px">PCC — Power Control Centre</div>
+      <div style="color:var(--primary2);font-size:16px;margin:2px 0">↓</div>
+      <div style="background:#2563EB;color:#fff;border-radius:8px;padding:8px;font-family:Poppins;font-size:12px;font-weight:700;margin-bottom:5px">MDB — Main Distribution Board</div>
+      <div style="color:var(--primary2);font-size:16px;margin:2px 0">↓</div>
+      <div style="background:#3B82F6;color:#fff;border-radius:8px;padding:8px;font-family:Poppins;font-size:12px;font-weight:700;margin-bottom:5px">IMDB → SMDB</div>
+      <div style="color:var(--primary2);font-size:16px;margin:2px 0">↓</div>
+      <div style="background:var(--green);color:#fff;border-radius:8px;padding:8px;font-family:Poppins;font-size:12px;font-weight:700;margin-bottom:5px">DB — Final Distribution Board</div>
+      <div style="color:var(--primary2);font-size:16px;margin:2px 0">↓</div>
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px;font-size:12px;color:var(--text2)">Loads — Lights, Sockets, AC, Motors</div>
+    </div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>MDB — Main Distribution Board</span><div class="arr">+</div></div><div class="acc-a">Building ka sabse pehla LT panel. Main incomer MCCB (400A–1600A). Copper ya aluminium busbar. Sab SMDB/DB ko power yahan se milti hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>IMDB — Intermediate Main DB</span><div class="arr">+</div></div><div class="acc-a">Bade buildings mein MDB aur SMDB ke beech. Floor-wise ya zone-wise power distribution ke liye.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>SMDB — Sub Main DB</span><div class="arr">+</div></div><div class="acc-a">Floor ya zone level pe. Typical rating: 100A–400A. Riser cables yahan se final DB tak.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>DB — Distribution Board (Final)</span><div class="arr">+</div></div><div class="acc-a">End user ke paas. Lights, sockets, AC ke liye MCB/RCCB. Domestic: 4–16 way. IS:8623 standard.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>PDB — Power Distribution Board</span><div class="arr">+</div></div><div class="acc-a">Sirf power loads (motors, heavy equipment) ke liye dedicated panel.</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-mcc">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">MCC / PCC</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">⚙️</div><div><div class="tip-t">MCC — Motor Control Centre</div><div class="tip-d">Multiple motors ke starters ek jagah. Incomer MCCB, bus bar, individual motor feeders (MCCB+Contactor+OLR).</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🏭</div><div><div class="tip-t">PCC — Power Control Centre</div><div class="tip-d">Transformer output pe. High current bus bar (1000A–6000A). ACB incomer.</div></div></div>
+    <div class="ritem"><div><div class="ri-l">800A–1600A ACB</div><div class="ri-s">Large MDB incomer</div></div><div class="ri-r" style="color:var(--primary2)">LV</div></div>
+    <div class="ritem"><div><div class="ri-l">2000A–4000A ACB</div><div class="ri-s">PCC incomer</div></div><div class="ri-r" style="color:var(--green)">LV</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-busbar">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Busbar Reference</div></div>
+  <div class="body">
+    <div class="slabel">Copper Busbar</div>
+    <table class="rtable"><tr><th>Size (mm)</th><th>Current</th><th>Use</th></tr><tr><td><b>25×3</b></td><td>~125A</td><td>Small DB</td></tr><tr><td><b>40×5</b></td><td>~280A</td><td>Commercial DB</td></tr><tr><td><b>50×10</b></td><td>~500A</td><td>Large MDB</td></tr><tr><td><b>63×10</b></td><td>~630A</td><td>Main MDB</td></tr><tr><td><b>80×10</b></td><td>~800A</td><td>Large MDB/PCC</td></tr><tr><td><b>100×10</b></td><td>~1000A</td><td>PCC/MCC</td></tr><tr><td><b>160×10</b></td><td>~1600A</td><td>Main PCC</td></tr></table>
+    <div class="ibox ib-yellow">💡 Copper: 1.5 A/mm² safe. Aluminium: 1.0 A/mm² safe.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-drum">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Cable Drum Sizes</div></div>
+  <div class="body">
+    <table class="rtable"><tr><th>Length</th><th>Cable Size</th><th>Use</th></tr><tr><td><b>100m coil</b></td><td>1.5–10 mm²</td><td>House wiring</td></tr><tr><td><b>200m</b></td><td>6–16 mm²</td><td>Building</td></tr><tr><td><b>500m</b></td><td>16–240 mm²</td><td>Standard drum</td></tr><tr><td><b>1000m</b></td><td>Large cables</td><td>Industrial</td></tr><tr><td><b>500m</b></td><td>SWA Armoured</td><td>Wooden drum</td></tr></table>
+    <div class="tipcard"><div class="tip-icon">⚠️</div><div><div class="tip-t">Drum Handling</div><div class="tip-d">Drum hamesha khada rakho. Cable upar se nikalo. Arrow direction follow karo.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-motor">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Motor Starter</div></div>
+  <div class="body">
+    <div class="card">
+      <div class="fg"><label>Motor Power</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input type="number" id="mot-kw" placeholder="e.g. 15"/><select id="mot-unit"><option value="kw">kW</option><option value="hp">HP</option></select></div></div>
+      <div class="fg"><label>Supply</label><select id="mot-v"><option value="415">415V (3-Phase)</option><option value="230">230V (1-Phase)</option></select></div>
+      <button class="btn" onclick="calcMotor()">Calculate</button>
+      <div id="mot-res" style="display:none;margin-top:12px"><div class="result"><div class="res-l">Recommended Starter</div><div class="res-v" id="mot-method"></div><div class="res-n" id="mot-reason"></div></div><div style="margin-top:8px" id="mot-details"></div></div>
+    </div>
+    <div class="ritem"><div><div class="ri-l">DOL Starter</div><div class="ri-s">Up to 5 HP</div></div><div class="ri-r" style="color:var(--green)">Simple</div></div>
+    <div class="ritem"><div><div class="ri-l">Star-Delta</div><div class="ri-s">5–50 HP motors</div></div><div class="ri-r" style="color:var(--primary2)">Standard</div></div>
+    <div class="ritem"><div><div class="ri-l">VFD Drive</div><div class="ri-s">Energy saving + control</div></div><div class="ri-r" style="color:var(--purple)">Advanced</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-trafo">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Transformer KVA</div></div>
+  <div class="body">
+    <div class="card">
+      <div class="fg"><label>Total Load (kW)</label><input type="number" id="tf-kw" placeholder="e.g. 100"/></div>
+      <div class="fg"><label>Power Factor</label><select id="tf-pf"><option value="0.85">0.85</option><option value="0.9">0.90</option><option value="0.8">0.80</option></select></div>
+      <div class="fg"><label>Demand Factor</label><select id="tf-df"><option value="0.8">0.80</option><option value="1">1.0</option><option value="0.7">0.70</option></select></div>
+      <div class="fg"><label>Future Expansion</label><select id="tf-fx"><option value="1.25">25%</option><option value="1.2">20%</option><option value="1">None</option></select></div>
+      <button class="btn" onclick="calcTrafo()">Calculate</button>
+      <div class="result" id="tf-res" style="display:none"><div class="res-l">Required KVA</div><div class="res-v" id="tf-v"></div><div class="res-n" id="tf-n"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-ohm">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Ohm's Law</div></div>
+  <div class="body">
+    <div class="card">
+      <div class="ibox ib-blue">Do values daalo, teesri calculate hogi.</div>
+      <div class="fg"><label>Voltage V (volts)</label><input type="number" id="o-v" placeholder="blank = calculate"/></div>
+      <div class="fg"><label>Current I (amperes)</label><input type="number" id="o-i" placeholder="blank = calculate"/></div>
+      <div class="fg"><label>Resistance R (ohms)</label><input type="number" id="o-r" placeholder="blank = calculate"/></div>
+      <button class="btn" onclick="calcOhm()">Calculate</button>
+      <div class="result" id="ohm-res" style="display:none"><div class="res-l" id="ohm-lbl">Result</div><div class="res-v" id="ohm-v"></div><div class="res-n" id="ohm-p"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-pf">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Power Factor Correction</div></div>
+  <div class="body">
+    <div class="card">
+      <div class="fg"><label>Active Power (kW)</label><input type="number" id="pf-kw" placeholder="e.g. 100"/></div>
+      <div class="fg"><label>Existing PF</label><input type="number" id="pf-exist" placeholder="e.g. 0.72" step="0.01"/></div>
+      <div class="fg"><label>Target PF</label><input type="number" id="pf-target" placeholder="e.g. 0.95" step="0.01"/></div>
+      <button class="btn" onclick="calcPF()">Calculate</button>
+      <div class="result" id="pf-res" style="display:none"><div class="res-l">Required Capacitor Bank</div><div class="res-v" id="pf-v2"></div><div class="res-n" id="pf-n"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-color">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Wire Color Codes</div></div>
+  <div class="body">
+    <div class="slabel">🇮🇳 India — IS:732</div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#EF4444"></div><div><div class="ri-l">R Phase / Live</div><div class="ri-s">Red</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#FBBF24"></div><div><div class="ri-l">Y Phase</div><div class="ri-s">Yellow</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#3B82F6"></div><div><div class="ri-l">B Phase / Neutral</div><div class="ri-s">Blue (new) / Black (old)</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#16A34A 50%,#FBBF24 50%)"></div><div><div class="ri-l">Earth</div><div class="ri-s">Green-Yellow</div></div></div></div>
+    <div class="slabel">🌍 IEC 60446 — Gulf</div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#92400E"></div><div><div class="ri-l">L1 Phase</div><div class="ri-s">Brown</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#1F2937"></div><div><div class="ri-l">L2 Phase</div><div class="ri-s">Black</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#6B7280"></div><div><div class="ri-l">L3 Phase</div><div class="ri-s">Grey</div></div></div></div>
+    <div class="ritem"><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:7px;background:#3B82F6"></div><div><div class="ri-l">Neutral</div><div class="ri-s">Blue</div></div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-earth">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Earthing Guide</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔩</div><div><div class="tip-t">Plate Earthing</div><div class="tip-d">600×600mm GI/copper plate, min 3m deep. Domestic ke liye. IS:3043.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔧</div><div><div class="tip-t">Pipe Earthing</div><div class="tip-d">40mm GI pipe, 2.5–3m deep. Industrial. Salt + charcoal.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚡</div><div><div class="tip-t">Rod Earthing</div><div class="tip-d">Copper/GI rod 16mm dia, min 3m. Compact, Gulf mein common.</div></div></div>
+    <div class="ritem"><div class="ri-l">Residential</div><div class="ri-r" style="color:var(--green)">&lt; 5 Ω</div></div>
+    <div class="ritem"><div class="ri-l">Industrial</div><div class="ri-r" style="color:var(--primary2)">&lt; 2 Ω</div></div>
+    <div class="ritem"><div class="ri-l">Power Station</div><div class="ri-r" style="color:var(--red)">&lt; 1 Ω</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-bill">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Bill Estimate</div></div>
+  <div class="body">
+    <div class="card">
+      <div class="fg"><label>Customer Name</label><input type="text" id="b-name" placeholder="e.g. Ramesh Sharma"/></div>
+      <div class="fg"><label>Job</label><input type="text" id="b-job" placeholder="e.g. Wiring 2BHK Flat"/></div>
+      <div class="fg"><label>Material (₹)</label><input type="number" id="b-mat" placeholder="e.g. 5000"/></div>
+      <div class="fg"><label>Labour (₹)</label><input type="number" id="b-lab" placeholder="e.g. 2500"/></div>
+      <div class="fg"><label>GST %</label><select id="b-gst"><option value="0">No GST</option><option value="5">5%</option><option value="12">12%</option><option value="18">18%</option></select></div>
+      <button class="btn" onclick="genBill()">Bill Generate Karo</button>
+    </div>
+    <div id="bill-out" style="display:none;margin-top:4px">
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px"><div><div style="font-family:Poppins;font-size:17px;font-weight:800;color:var(--primary)">⚡ ElectroMind</div><div style="font-size:10px;color:var(--text3)">Electrical Services</div></div><div style="font-size:10px;color:var(--text3);text-align:right" id="b-date"></div></div>
+        <div style="background:var(--surface2);border-radius:9px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--text2)" id="b-header"></div>
+        <div id="b-rows"></div>
+        <div style="border-top:2px solid var(--primary);margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;align-items:center"><div style="font-family:Poppins;font-size:14px;font-weight:700;color:var(--primary)">TOTAL</div><div style="font-family:Poppins;font-size:22px;font-weight:800;color:var(--green)" id="b-total"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIPS SCREENS -->
+<div class="screen" id="s-tips-site">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Site Pe Shortcuts</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">📏</div><div><div class="tip-t">Cable Length Estimate</div><div class="tip-d">Apna qadam measure karo (typically 2.5 feet). Walk karke roughly length calculate karo. Conduit ke liye 10-15% extra add karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🧲</div><div><div class="tip-t">Conduit Mein Wire Dalne Ka Trick</div><div class="tip-d">Pehle fish tape ya nylon rope daal do. Cable tape karo rope ke saath. Talcum powder ya cable gel use karo friction kam karne ke liye.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">📱</div><div><div class="tip-t">Phone Ka Smart Use</div><div class="tip-d">Kisi bhi connection ka photo khincho pehle — baad mein reference ke liye. Panel wiring, junction box — sab photo rakho.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🎯</div><div><div class="tip-t">MCB Labelling</div><div class="tip-d">Har MCB pe label lagao — "Lights Floor 1", "AC Bedroom". Baad mein aur doosre electricians ka kaam asaan hoga.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔦</div><div><div class="tip-t">Kaam Shuru Karne Se Pehle</div><div class="tip-d">1) Power off. 2) Test lamp se verify. 3) Lock/Tag lagao. 4) Phir haath lagao. 30 second ki safety jaan bachati hai.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-tips-wire">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Wire Identification Tips</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🎨</div><div><div class="tip-t">Color Se Pehchano</div><div class="tip-d">India: Red/Yellow/Blue = Phase. Gulf/IEC: Brown/Black/Grey = Phase. Site pe pehle standard confirm karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚡</div><div><div class="tip-t">Test Lamp Se Identify</div><div class="tip-d">Live wire: Lamp jalega. Neutral/Earth: Nahi jalega. Hamesha test karo — color pe trust mat karo akele.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">📐</div><div><div class="tip-t">Wire Size Estimate</div><div class="tip-d">1.5mm² ≈ 1.4mm dia. 2.5mm² ≈ 1.8mm. 4mm² ≈ 2.3mm. 6mm² ≈ 2.8mm.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔢</div><div><div class="tip-t">Cable Markings Padho</div><div class="tip-d">Har cable pe print: size (mm²), voltage rating, standard. Jaise "2.5mm² 1100V IS:694".</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-tips-fault">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Fault Finding Methods</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔍</div><div><div class="tip-t">Half Split Method</div><div class="tip-d">Circuit ko beech se check karo. Agar theek hai toh problem doosri taraf. Phir us half ko phir beech se check karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">👁️</div><div><div class="tip-t">Visual Inspection Pehle</div><div class="tip-d">Broken wires, burnt marks, loose terminals — 70% faults visual inspection se mil jate hain.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">👃</div><div><div class="tip-t">Smell Se Pata Karo</div><div class="tip-d">Burning smell = overheating wire. Plastic jalne ki smell = insulation damage.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔌</div><div><div class="tip-t">Load Ek-Ek Karke Lagao</div><div class="tip-d">MCB trip ho — sab disconnect, phir ek ek load lagao. Jis load pe trip ho woh faulty hai.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-tips-panel">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Panel Wiring Tricks</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">📏</div><div><div class="tip-t">Wire Length Sahi Kato</div><div class="tip-d">Napke kato — terminal tak seedha route. Cable ties se bundle karo — neat dikhta hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🎨</div><div><div class="tip-t">Color Coding Follow Karo</div><div class="tip-d">Red/Brown = Phase, Black/Blue = Neutral, Green-Yellow = Earth. Ferrule (number tubes) lagao har wire pe.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔢</div><div><div class="tip-t">Ferrule (Number Tag) Lagao</div><div class="tip-d">Har wire pe number tube lagao. Terminal block aur wire dono pe same number ho.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔧</div><div><div class="tip-t">Terminal Tightening</div><div class="tip-d">Stranded wire ke end pe bootlace ferrule lagao phir connect karo. Loose = overheating.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-tips-cable">
+  <div class="topnav"><button class="back-btn" onclick="go('s-pro')">←</button><div class="nav-title">Cable Pulling Tips</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🥁</div><div><div class="tip-t">Drum Ko Khada Rakho</div><div class="tip-d">Flat mat rakho — cable twist ho jata hai. Hamesha flange pe khada rakho. Upar se nikalo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🧴</div><div><div class="tip-t">Cable Pulling Lubricant</div><div class="tip-d">Long conduit mein cable pulling gel ya talcum powder use karo. Soap mat use karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">📐</div><div><div class="tip-t">Bend Radius Ka Dhyan</div><div class="tip-d">Min bend radius = 8× cable OD (armoured). Tight bend se insulation crack hoti hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔖</div><div><div class="tip-t">Cable Tag Immediately</div><div class="tip-d">Cable daal ke turant tag lagao — from, to, size, circuit number.</div></div></div>
+  </div>
+</div>
+
+<!-- ======= HOME GUIDE ======= -->
+<div class="screen" id="s-home">
+  <div class="topnav"><button class="back-btn" onclick="go('s0')">←</button><div class="nav-title">Home Guide</div></div>
+  <div class="body">
+    <div class="sec-banner sb-home"><div class="sb-title">Home Safety Hub</div><div class="sb-sub">Safe & simple electrical guidance</div><div class="sb-emoji">🏠</div></div>
+    <div class="slabel">🔌 Ghar Ki Wiring</div>
+    <div class="fcard" onclick="go('s-wiring-flow')"><div class="fc-icon" style="background:#EFF6FF">⚡</div><div><div class="fc-title">Bijli Kaise Aati Hai Ghar Mein?</div><div class="fc-sub">Pole se socket tak — poora flow</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-circuits')"><div class="fc-icon" style="background:#ECFDF5">🔌</div><div><div class="fc-title">Ghar Ke Circuits</div><div class="fc-sub">Lighting, power, AC, geyser circuits</div></div><div class="fc-arr">›</div></div>
+    <div class="slabel">🚨 Safety & Emergency</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="go('s-safety')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">⚠️</div><div class="tc-title">Safety Tips</div><div class="tc-sub">Hazards se bachein</div></div>
+      <div class="tcard" onclick="go('s-emergency')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FEF2F2,#FCA5A5)">🚨</div><div class="tc-title">Emergency Guide</div><div class="tc-sub">Emergency mein kya karein</div></div>
+      <div class="tcard" onclick="go('s-diagnose')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">🔍</div><div class="tc-title">Problem Diagnosis</div><div class="tc-sub">Issue identify karo</div></div>
+      <div class="tcard" onclick="go('s-diy')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">🛠️</div><div class="tc-title">DIY Basics</div><div class="tc-sub">Safe ghar ka kaam</div></div>
+    </div>
+    <div class="slabel">🔧 Ghar Ka Kaam Khud Karo</div>
+    <div class="fcard" onclick="go('s-switch')"><div class="fc-icon" style="background:#F5F3FF">🔘</div><div><div class="fc-title">Switch Change Karo</div><div class="fc-sub">Step-by-step beginner guide</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-socket')"><div class="fc-icon" style="background:#EFF6FF">🔌</div><div><div class="fc-title">Socket / Plug Fit Karo</div><div class="fc-sub">L, N, E connection guide</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-mcb-reset')"><div class="fc-icon" style="background:#FFFBEB">⚡</div><div><div class="fc-title">MCB Trip — Kya Karein?</div><div class="fc-sub">Reset & fault find guide</div></div><div class="fc-arr">›</div></div>
+    <div class="fcard" onclick="go('s-fan')"><div class="fc-icon" style="background:#ECFDF5">🌀</div><div><div class="fc-title">Fan Regulator Change</div><div class="fc-sub">Step-by-step guide</div></div><div class="fc-arr">›</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-wiring-flow">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Bijli Ka Safar</div></div>
+  <div class="body">
+    <div class="ibox ib-green">⚡ Bijli pole se aapke har socket tak kaise pahunchi hai.</div>
+    <div class="flow-box"><div class="flow-num">1</div><div><div class="flow-t">Bijli Board / Power Station</div><div class="flow-d">11kV transmission line. MSEB, TNEB jaise companies supply karti hain.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">2</div><div><div class="flow-t">Transformer (Colony Mein)</div><div class="flow-d">11kV ko 230V/415V mein convert karta hai. Pillar pe ya ground pe.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">3</div><div><div class="flow-t">Service Cable (Ghar Tak)</div><div class="flow-d">2-wire (L+N) ya 4-wire (R+Y+B+N). Underground ya overhead.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">4</div><div><div class="flow-t">Energy Meter (Bijli Meter)</div><div class="flow-d">Units (kWh) count karta hai. Smart meter digital reading deta hai.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">5</div><div><div class="flow-t">Main Switch / DP Switch</div><div class="flow-d">Poore ghar ki bijli band karo yahan se. Emergency mein sabse pehle yahi band karo!</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">6</div><div><div class="flow-t">Main MCB + RCCB</div><div class="flow-d">MCB: Short circuit protection. RCCB (30mA): Earth leakage se jaan bachata hai.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">7</div><div><div class="flow-t">Distribution Board (DB Panel)</div><div class="flow-d">Sab circuits yahan se alag hote hain. Har circuit ka apna MCB.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">8</div><div><div class="flow-t">Conduit Wiring (Walls Mein)</div><div class="flow-d">PVC conduit mein wires chhupa ke. 2.5mm² power, 1.5mm² lights.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">9</div><div><div class="flow-t">Switches & Sockets</div><div class="flow-d">Har room mein switch board. Switch: Lights, fans. Socket: TV, charger.</div></div></div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box"><div class="flow-num">10</div><div><div class="flow-t">End Loads (Appliances) ✅</div><div class="flow-d">Lights, fans, AC, fridge, TV, geyser — bijli ka safar khatam!</div></div></div>
+    <div class="ibox ib-red" style="margin-top:10px">⚠️ Emergency mein Step 5 (Main Switch) band karo!</div>
+  </div>
+</div>
+
+<div class="screen" id="s-circuits">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Ghar Ke Circuits</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">💡</div><div><div class="tip-t">Lighting Circuit (6A MCB)</div><div class="tip-d">Lights aur fans. Wire: 1.5 mm² copper. 8–10 lights/fans per circuit.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔌</div><div><div class="tip-t">Power/Socket Circuit (16A MCB)</div><div class="tip-d">TV, fridge, charger. Wire: 2.5 mm² copper.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">❄️</div><div><div class="tip-t">AC Circuit (20A MCB)</div><div class="tip-d">Dedicated circuit. Wire: 4 mm² copper. 1.5T=16A, 2T=20A MCB.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🚿</div><div><div class="tip-t">Geyser Circuit (16A/20A MCB)</div><div class="tip-d">Dedicated. Wire: 4 mm² copper. RCCB mandatory.</div></div></div>
+    <div class="ibox ib-green">💡 AC, geyser, pump — har heavy load ka dedicated circuit hona chahiye.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-safety">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Safety Tips</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">🔴</div><div><div class="tip-t">Main Switch Band Karo Pehle</div><div class="tip-d">Hamesha MCB off karo. Test lamp se verify karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🧤</div><div><div class="tip-t">Insulated Tools Use Karo</div><div class="tip-d">1000V rated gloves aur insulated screwdrivers. Bare hands kabhi nahi.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">💧</div><div><div class="tip-t">Geele Haathon Se Kabhi Nahi</div><div class="tip-d">Bathroom, kitchen mein extra caution. Paani bijli ka conductor hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔥</div><div><div class="tip-t">Overloading Se Bachao</div><div class="tip-d">Ek socket pe bahut saare adapters mat lagao. Fire risk hai!</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🌍</div><div><div class="tip-t">Earthing Check Karo</div><div class="tip-d">Proper earthing se shock se jaan bachi rehti hai.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-emergency">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Emergency Guide</div></div>
+  <div class="body">
+    <div class="warn">🚨 Emergency mein: Main switch TURANT band karo!</div>
+    <div class="em-step em-r"><div class="em-num">1</div><div><div class="em-t">Main Switch Band Karo</div><div class="em-d">Ghar ka main MCB ya fuse off karo. Jaldi karo!</div></div></div>
+    <div class="em-step em-r"><div class="em-num">2</div><div><div class="em-t">Shock — Mat Chhuoo</div><div class="em-d">Haath mat lagao. Dry wood se push karo aur power band karo.</div></div></div>
+    <div class="em-step em-y"><div class="em-num">3</div><div><div class="em-t">Fire — Paani Nahi!</div><div class="em-d">CO₂ ya dry powder extinguisher use karo. Paani kabhi mat dalo.</div></div></div>
+    <div class="em-step em-y"><div class="em-num">4</div><div><div class="em-t">Emergency Call Karo</div><div class="em-d">Emergency: 112 | Fire: 101 | Ambulance: 108</div></div></div>
+    <div class="em-step em-g"><div class="em-num">5</div><div><div class="em-t">CPR — Agar Breathing Nahi</div><div class="em-d">30 compressions + 2 breaths. Ambulance aane tak jaari rakho.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-diagnose">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Problem Diagnosis</div></div>
+  <div class="body">
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>MCB baar baar trip ho raha hai</span><div class="arr">+</div></div><div class="acc-a">Overload ya short circuit. Sab appliances band karo, MCB on karo, ek ek karke lagao — jis pe trip ho woh faulty hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Socket se spark aa raha hai</span><div class="arr">+</div></div><div class="acc-a">Loose connection ya worn out socket. Turant band karo. Electrician se replace karwao.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Lights flickering kar rahi hain</span><div class="arr">+</div></div><div class="acc-a">Loose wire, faulty bulb holder, ya voltage fluctuation. Pehle bulb change karke dekho.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Switch on karne pe shock lagta hai</span><div class="arr">+</div></div><div class="acc-a">Earth wire missing ya loose. Dangerous — electrician se check karwao turant.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Ghar mein burning smell</span><div class="arr">+</div></div><div class="acc-a">Wire overheating ya loose connection. Main switch band karo. Electrician ko call karo.</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-diy">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">DIY Basics</div></div>
+  <div class="body">
+    <div class="warn">⚠️ Sirf basic kaam. High voltage, DB panel — hamesha licensed electrician se karwao.</div>
+    <div class="tipcard"><div class="tip-icon">💡</div><div><div class="tip-t">Bulb / Tube Change</div><div class="tip-d">Switch off → 5 min wait → anticlockwise nikalo → naya lagao → test karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔌</div><div><div class="tip-t">Plug Wire Repair</div><div class="tip-d">Main se unplug karo → plug kholo → wires check karo → tight karo → band karo.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚡</div><div><div class="tip-t">MCB Reset</div><div class="tip-d">Sab appliances band karo → MCB lever pura neeche phir upar → ek ek appliance on karo.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-switch">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Switch Change Karo</div></div>
+  <div class="body">
+    <div class="warn">⚠️ Pehle MCB BAND karo. Test lamp se confirm karo.</div>
+    <div class="step"><div class="step-n">1</div><div><div class="step-t">MCB Band Karo</div><div class="step-d">Us circuit ka MCB off karo. Test lamp se verify karo.</div></div></div>
+    <div class="step"><div class="step-n">2</div><div><div class="step-t">Cover Kholo</div><div class="step-d">Screwdriver se cover ke screws nikalo.</div></div></div>
+    <div class="step"><div class="step-n">3</div><div><div class="step-t">Wires Photo Lo</div><div class="step-d">Photo khincho — kaunsi wire kahan thi note karo.</div></div></div>
+    <div class="step"><div class="step-n">4</div><div><div class="step-t">Purana Switch Nikalo</div><div class="step-d">Wires loosen karo. Switch screws khol ke nikalo.</div></div></div>
+    <div class="step"><div class="step-n">5</div><div><div class="step-t">Naya Switch Lagao</div><div class="step-d">Same position mein wires connect karo. Tightly screw karo.</div></div></div>
+    <div class="step"><div class="step-n">6</div><div><div class="step-t">Test Karo ✅</div><div class="step-d">Cover band karo. MCB on karo. Switch test karo. Done!</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-socket">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Socket / Plug</div></div>
+  <div class="body">
+    <div class="warn">⚠️ MCB band karo pehle. Test lamp se confirm karo.</div>
+    <div class="step"><div class="step-n" style="background:var(--red)">L</div><div><div class="step-t">Live Terminal (Top Right)</div><div class="step-d">Red / Brown wire — L terminal pe connect karo.</div></div></div>
+    <div class="step"><div class="step-n" style="background:var(--primary2)">N</div><div><div class="step-t">Neutral Terminal (Top Left)</div><div class="step-d">Black / Blue wire — N terminal pe connect karo.</div></div></div>
+    <div class="step"><div class="step-n" style="background:var(--green)">E</div><div><div class="step-t">Earth Terminal (Bottom Big)</div><div class="step-d">Green-Yellow wire — E terminal. Earth pin sabse bada hota hai.</div></div></div>
+    <div class="ibox ib-yellow">💡 Earth wire hamesha lagao — RCCB tabhi kaam karega.</div>
+  </div>
+</div>
+
+<div class="screen" id="s-mcb-reset">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">MCB Trip — Kya Karein?</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">⚡ MCB trip hona normal hai — ghabrao mat.</div>
+    <div class="step"><div class="step-n">1</div><div><div class="step-t">Sab Appliances Band Karo</div><div class="step-d">Us circuit ke sab lights, fans, AC unplug ya band karo.</div></div></div>
+    <div class="step"><div class="step-n">2</div><div><div class="step-t">Tripped MCB Identify Karo</div><div class="step-d">DB panel mein beech mein ya off position mein MCB — woh tripped hai.</div></div></div>
+    <div class="step"><div class="step-n">3</div><div><div class="step-t">MCB Reset Karo</div><div class="step-d">Lever pura neeche (OFF), phir upar (ON). Click sound aayegi.</div></div></div>
+    <div class="step"><div class="step-n">4</div><div><div class="step-t">Ek-Ek Appliance On Karo</div><div class="step-d">Jis appliance pe MCB phir trip ho — woh faulty hai.</div></div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-fan">
+  <div class="topnav"><button class="back-btn" onclick="go('s-home')">←</button><div class="nav-title">Fan Regulator Change</div></div>
+  <div class="body">
+    <div class="warn">⚠️ MCB band karo pehle.</div>
+    <div class="step"><div class="step-n">1</div><div><div class="step-t">MCB Band Karo</div><div class="step-d">Fan wale circuit ka MCB off karo.</div></div></div>
+    <div class="step"><div class="step-n">2</div><div><div class="step-t">Cover Nikalo</div><div class="step-d">Screws nikalo. 2 wires hongi — in aur out.</div></div></div>
+    <div class="step"><div class="step-n">3</div><div><div class="step-t">Naya Connect Karo</div><div class="step-d">Same 2 wires naye mein connect karo.</div></div></div>
+    <div class="step"><div class="step-n">4</div><div><div class="step-t">Test Karo ✅</div><div class="step-d">Cover band karo, MCB on karo, fan chalao. Done!</div></div></div>
+    <div class="ibox ib-green">💡 Electronic regulator lagao — bijli bachat hoti hai.</div>
+  </div>
+</div>
+
+<!-- ======= INTERVIEW PREP ======= -->
+<div class="screen" id="s-int">
+  <div class="topnav"><button class="back-btn" onclick="go('s0')">←</button><div class="nav-title">Interview Prep</div></div>
+  <div class="body">
+    <div class="sec-banner sb-int"><div class="sb-title">Get Job Ready</div><div class="sb-sub">India & Gulf — Domestic & Industrial</div><div class="sb-emoji">🎯</div></div>
+    <div class="slabel">🌍 Region Chunein</div>
+    <div class="int-choice" onclick="go('s-india')"><div class="int-flag">🇮🇳</div><div style="flex:1"><div class="int-title">India Interview</div><div class="int-sub">IS codes, domestic & industrial Q&A</div></div><div class="int-arr">›</div></div>
+    <div class="int-choice" onclick="go('s-gulf')"><div class="int-flag">🌍</div><div style="flex:1"><div class="int-title">Gulf Interview</div><div class="int-sub">UAE, Saudi, Qatar — IEC/BS, DEWA, PTW</div></div><div class="int-arr">›</div></div>
+    <div class="slabel">📚 Practice & Reference</div>
+    <div class="tgrid">
+      <div class="tcard" onclick="startQuiz()"><div class="tc-icon-box" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">🧪</div><div class="tc-title">Mock Test</div><div class="tc-sub">25 MCQ questions</div></div>
+      <div class="tcard" onclick="go('s-az')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#EFF6FF,#BFDBFE)">🔤</div><div class="tc-title">A-Z Materials</div><div class="tc-sub">A se Z tak</div></div>
+      <div class="tcard" onclick="go('s-int-tips')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">🏆</div><div class="tc-title">Interview Tips</div><div class="tc-sub">Impress karo</div></div>
+      <div class="tcard" onclick="go('s-salary')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">💰</div><div class="tc-title">Salary Guide</div><div class="tc-sub">India & Gulf rates</div></div>
+      <div class="tcard" onclick="go('s-docs')"><div class="tc-icon-box" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA)">📄</div><div class="tc-title">Documents List</div><div class="tc-sub">Interview ke liye</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="s-india">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">🇮🇳 India Interview</div></div>
+  <div class="body">
+    <div class="subchoice" onclick="go('s-india-dom')"><div class="sc-icon sc-dom">🏠</div><div><div class="sc-title">Domestic Electrical</div><div class="sc-sub">House wiring, switches, DB, safety</div></div><div class="int-arr">›</div></div>
+    <div class="subchoice" onclick="go('s-india-ind')"><div class="sc-icon sc-ind">🏭</div><div><div class="sc-title">Industrial Electrical</div><div class="sc-sub">Motors, panels, cables, IS codes</div></div><div class="int-arr">›</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-india-dom">
+  <div class="topnav"><button class="back-btn" onclick="go('s-india')">←</button><div class="nav-title">🏠 India Domestic Q&A</div></div>
+  <div class="body">
+    <div class="ibox ib-green">🏠 Domestic electrician interview ke liye common questions.</div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Ghar ki wiring mein kaun sa wire?</span><div class="arr">+</div></div><div class="acc-a">IS:694: Lights = 1.5mm² copper, Sockets = 2.5mm² copper, AC/Geyser = 4mm² copper, Earth = Green-Yellow. Hamesha ISI marked wire use karo.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>MCB aur Fuse mein kya farq?</span><div class="arr">+</div></div><div class="acc-a">MCB: Reset ho sakta hai, fast, accurate, long life. Fuse: Replace karna padta hai, slow. MCB better hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>RCCB kyon zaroori hai?</span><div class="arr">+</div></div><div class="acc-a">Earth leakage pe 30mA pe trip — insaan ki jaan bachata hai. MCB sirf overload/short circuit se bachata hai. Dono chahiye.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Earthing kyun zaroori hai?</span><div class="arr">+</div></div><div class="acc-a">Fault current ko safely earth mein bhejna, shock se bachana. IS:3043: residential earthing &lt;5Ω honi chahiye.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Switch hamesha live wire pe kyun?</span><div class="arr">+</div></div><div class="acc-a">Safety ke liye. Neutral pe switch lage toh switch off hone pe bhi fixture pe live current rahega.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>3-pin plug ka connection?</span><div class="arr">+</div></div><div class="acc-a">Top left = Neutral (Blue), Top right = Live (Red/Brown), Bottom big = Earth (Green-Yellow). Earth pin pehle enter hota hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>AC ke liye dedicated circuit kyun?</span><div class="arr">+</div></div><div class="acc-a">AC high starting current leta hai. Shared circuit pe other loads pe voltage drop aata hai. Dedicated 20A MCB lagao.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Wire color code India mein?</span><div class="arr">+</div></div><div class="acc-a">IS:732: Red = R Phase/Live, Yellow = Y Phase, Blue = Neutral (new), Green-Yellow = Earth, Black = Old neutral.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Insulation resistance test kya hai?</span><div class="arr">+</div></div><div class="acc-a">Megger se 500V DC apply karke resistance check karna. Minimum 1 MΩ. New wiring commission se pehle mandatory.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>PVC conduit aur GI conduit farq?</span><div class="arr">+</div></div><div class="acc-a">PVC: Cheap, light, domestic. GI: Heavy, strong, fire resistant, industrial/outdoor. Gulf mein GI zyada.</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-india-ind">
+  <div class="topnav"><button class="back-btn" onclick="go('s-india')">←</button><div class="nav-title">🏭 India Industrial Q&A</div></div>
+  <div class="body">
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>DOL aur Star-Delta mein farq?</span><div class="arr">+</div></div><div class="acc-a">DOL: Full voltage seedha. High starting current (6-8× FLC). 5HP tak. Star-Delta: Pehle star (57.7%) phir delta. Starting current 1/3 kam. 5HP+ ke liye standard.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Full Load Current kaise calculate?</span><div class="arr">+</div></div><div class="acc-a">3-Phase: FLC = (kW × 1000) ÷ (√3 × V × PF × η). Example: 15kW, 415V, PF=0.85, η=0.9 → FLC ≈ 27A.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>VFD ka kya kaam hai?</span><div class="arr">+</div></div><div class="acc-a">Variable Frequency Drive — motor ki speed frequency badal ke control karta hai. 20-50% energy saving. Soft start. Pumps, fans pe use.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Power Factor kya hai?</span><div class="arr">+</div></div><div class="acc-a">PF = kW / kVA. Ideal = 1.0. Motors PF kam karte hain. Electricity board penalty lagata hai. Capacitor bank se improve hoti hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Important IS codes?</span><div class="arr">+</div></div><div class="acc-a">IS:732 (Wiring), IS:3043 (Earthing), IS:1554 (PVC cables), IS:8623 (DB panels), IS:2516 (Circuit breakers), IS:694 (House wiring), IS:12640 (RCCB).</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>MCC mein kya hota hai?</span><div class="arr">+</div></div><div class="acc-a">Motor Control Centre: Incomer MCCB, copper bus bar, individual motor feeders (MCCB + Contactor + Overload relay).</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Cable tray fill factor?</span><div class="arr">+</div></div><div class="acc-a">IS standard: 40% maximum. Tray area ka 40% se zyada cables nahi. 60% air circulation ke liye.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Transformer KVA kaise select?</span><div class="arr">+</div></div><div class="acc-a">KVA = (Total kW × Demand Factor) ÷ PF × 1.25. Example: 100kW, PF=0.85, DF=0.8 → ~118 KVA → Select 125 KVA.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Earthing resistance values?</span><div class="arr">+</div></div><div class="acc-a">IS:3043: Residential &lt;5Ω, Industrial &lt;2Ω, Power Station &lt;1Ω, Lightning arrester &lt;10Ω.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Busbar current density?</span><div class="arr">+</div></div><div class="acc-a">Copper: 1.5 A/mm² safe. Aluminium: 1.0 A/mm² safe. Example: 100×10mm copper = 1500A safe current.</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-gulf">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">🌍 Gulf Interview</div></div>
+  <div class="body">
+    <div class="subchoice" onclick="go('s-gulf-dom')"><div class="sc-icon sc-dom">🏠</div><div><div class="sc-title">Domestic / Villa Work</div><div class="sc-sub">DEWA, ADDC — villa & apartment wiring</div></div><div class="int-arr">›</div></div>
+    <div class="subchoice" onclick="go('s-gulf-ind')"><div class="sc-icon sc-ind">🏭</div><div><div class="sc-title">Industrial / Oil & Gas</div><div class="sc-sub">Aramco, ADNOC, PTW, LOTO, IEC</div></div><div class="int-arr">›</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-gulf-dom">
+  <div class="topnav"><button class="back-btn" onclick="go('s-gulf')">←</button><div class="nav-title">🏠 Gulf Domestic Q&A</div></div>
+  <div class="body">
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>DEWA kya hai?</span><div class="arr">+</div></div><div class="acc-a">Dubai Electricity & Water Authority. Dubai mein bijli aur paani supply. Electrical installations DEWA regulations ke hisab se honi chahiye. Approval mandatory.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Gulf mein wire color code?</span><div class="arr">+</div></div><div class="acc-a">IEC 60446: L1=Brown, L2=Black, L3=Grey, Neutral=Blue, Earth=Green-Yellow. India se alag — site pe pehle confirm karo.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Gulf mein open wiring kyun nahi?</span><div class="arr">+</div></div><div class="acc-a">Gulf regulations mein sab wiring conduit (PVC ya GI) mein honi chahiye. DEWA/ADDC inspectors check karte hain.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Gulf earthing system?</span><div class="arr">+</div></div><div class="acc-a">TN-S system standard. Earth resistance &lt;1Ω. Copper clad steel rods. Quarterly inspection. Earth certificate authority ko submit karna hota hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Gulf mein socket types?</span><div class="arr">+</div></div><div class="acc-a">UK type (BS 1363) 13A 3-pin — especially UAE mein. Sab sockets earthed. Switched sockets standard practice.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>ADDC, SEWA, KAHRAMAA kya hain?</span><div class="arr">+</div></div><div class="acc-a">ADDC = Abu Dhabi Distribution Company. SEWA = Sharjah Electricity. KAHRAMAA = Qatar General Electricity. Har authority ke apne regulations.</div></div>
+  </div>
+</div>
+
+<div class="screen" id="s-gulf-ind">
+  <div class="topnav"><button class="back-btn" onclick="go('s-gulf')">←</button><div class="nav-title">🏭 Gulf Industrial Q&A</div></div>
+  <div class="body">
+    <div class="ibox ib-red">🔥 Safety aur standards ka knowledge sabse important hai.</div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>PTW kya hota hai?</span><div class="arr">+</div></div><div class="acc-a">Permit to Work. Electrical kaam shuru se pehle written permission leni hoti hai. Types: Hot Work, Cold Work, Confined Space, Electrical Work Permit. Bina PTW = immediate termination.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>LOTO procedure step by step?</span><div class="arr">+</div></div><div class="acc-a">1) Notify workers. 2) Equipment shutdown. 3) Isolate energy. 4) Personal lock lagao. 5) Tag lagao. 6) Stored energy release. 7) Verify isolation. 8) Kaam karo. 9) Remove tools. 10) Remove lock. 11) Re-energize.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Hazardous Area classification?</span><div class="arr">+</div></div><div class="acc-a">IEC 60079: Zone 0 = Always explosive. Zone 1 = Normal operation mein explosive. Zone 2 = Abnormal conditions mein. ATEX/Ex rated equipment zaroor.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>Aramco electrical standards?</span><div class="arr">+</div></div><div class="acc-a">SAES = Saudi Aramco Engineering Standards. SAES-P-100, P-104, P-111. Very strict QC/QA. Method Statement aur Risk Assessment mandatory.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>ELV systems ka scope?</span><div class="arr">+</div></div><div class="acc-a">ELV = Extra Low Voltage (&lt;50V AC). Gulf scope: CCTV, Access Control, Fire Alarm, PA System, BMS, Structured Cabling (LAN). ELV knowledge extra salary deta hai.</div></div>
+    <div class="acc"><div class="acc-q" onclick="tog(this)"><span>India aur Gulf mein sabse bada farq?</span><div class="arr">+</div></div><div class="acc-a">1) PTW/LOTO mandatory. 2) PPE hamesha. 3) Open wiring nahi. 4) IEC standards. 5) English communication. 6) Documentation zaroori. 7) Strict inspection.</div></div>
+  </div>
+</div>
+
+<!-- A-Z MATERIALS -->
+<div class="screen" id="s-az">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">A-Z Electrical Materials</div></div>
+  <div class="body">
+    <div class="ibox ib-blue">🔤 Har electrical material ki basic jankari.</div>
+    <div class="az-card"><div class="az-letter">A</div><div><div class="az-name">Armoured Cable (SWA/AWA)</div><div class="az-desc">Steel/Aluminium wire armoured cable. Underground aur outdoor use. Mechanical protection. XLPE ya PVC insulation.</div></div></div>
+    <div class="az-card"><div class="az-letter">B</div><div><div class="az-name">Busbar</div><div class="az-desc">Copper ya Aluminium flat bar — panel mein power distribute karta hai. 25×3mm se 160×10mm tak.</div></div></div>
+    <div class="az-card"><div class="az-letter">C</div><div><div class="az-name">Conduit (PVC / GI)</div><div class="az-desc">Wire protect karne ke liye pipe. PVC: Domestic. GI: Industrial, outdoor. 20mm se 63mm sizes.</div></div></div>
+    <div class="az-card"><div class="az-letter">D</div><div><div class="az-name">Distribution Board (DB)</div><div class="az-desc">MCB aur RCCB ka panel. IS:8623 standard. 4-way se 40-way tak.</div></div></div>
+    <div class="az-card"><div class="az-letter">E</div><div><div class="az-name">Earth Rod / ELCB</div><div class="az-desc">Earth Rod: Copper clad steel, 16mm dia, 3m long. ELCB = Earth Leakage Circuit Breaker (old name for RCCB).</div></div></div>
+    <div class="az-card"><div class="az-letter">F</div><div><div class="az-name">Fuse (HRC / Rewirable)</div><div class="az-desc">HRC = High Rupturing Capacity. Fast, industrial. Rewirable/Kitkat: Old type. IS:9224.</div></div></div>
+    <div class="az-card"><div class="az-letter">G</div><div><div class="az-name">Gland (Cable Gland)</div><div class="az-desc">Cable ko enclosure mein seal karna. M-type: M16-M75. PG type: PG7-PG36. SWA ke liye double compression.</div></div></div>
+    <div class="az-card"><div class="az-letter">H</div><div><div class="az-name">Heat Shrink Tube</div><div class="az-desc">Wire joints insulate karna. Heat lagane pe shrink — tight seal. Electrical tape se better.</div></div></div>
+    <div class="az-card"><div class="az-letter">I</div><div><div class="az-name">Isolator Switch</div><div class="az-desc">Circuit ko completely isolate karna. Hamesha no-load pe operate karo.</div></div></div>
+    <div class="az-card"><div class="az-letter">J</div><div><div class="az-name">Junction Box</div><div class="az-desc">Wire joints cover karna. IP44 = weather resistant, IP65 = dust+water proof.</div></div></div>
+    <div class="az-card"><div class="az-letter">K</div><div><div class="az-name">KWh Meter (Energy Meter)</div><div class="az-desc">Bijli consumption measure karta hai. Smart meter digital reading. CT operated meter bade loads ke liye.</div></div></div>
+    <div class="az-card"><div class="az-letter">L</div><div><div class="az-name">Lug (Cable Lug)</div><div class="az-desc">Cable end pe terminal ke liye. Copper compression lug. Crimping tool se lagao — solder nahi.</div></div></div>
+    <div class="az-card"><div class="az-letter">M</div><div><div class="az-name">MCB / MCCB / Meter</div><div class="az-desc">MCB: 1A-125A domestic. MCCB: 100A-1600A industrial, adjustable trip.</div></div></div>
+    <div class="az-card"><div class="az-letter">N</div><div><div class="az-name">Neutral Link / Neutral Bar</div><div class="az-desc">Panel mein sab neutral wires yahan connect. Solid copper bar.</div></div></div>
+    <div class="az-card"><div class="az-letter">O</div><div><div class="az-name">Overload Relay (OLR)</div><div class="az-desc">Motor ko overloading se bachata hai. FLC ka 1.05-1.15× pe set karo.</div></div></div>
+    <div class="az-card"><div class="az-letter">P</div><div><div class="az-name">PVC Cable / Panel Board</div><div class="az-desc">PVC = Polyvinyl Chloride insulation. IS:694 standard. Panel Board = DB/MDB/SMDB.</div></div></div>
+    <div class="az-card"><div class="az-letter">Q</div><div><div class="az-name">Quick Connect Terminal (Wago)</div><div class="az-desc">Push-in terminal — tool ke bina wire connect. Spring clamp technology.</div></div></div>
+    <div class="az-card"><div class="az-letter">R</div><div><div class="az-name">RCCB / Relay / Rectifier</div><div class="az-desc">RCCB: Earth leakage protection. Relay: Control circuit switching. Rectifier: AC to DC convert.</div></div></div>
+    <div class="az-card"><div class="az-letter">S</div><div><div class="az-name">Switch / Socket / SWA Cable</div><div class="az-desc">Switch: IS:3854. Socket: IS:1293. SWA = Steel Wire Armoured. IS:1554.</div></div></div>
+    <div class="az-card"><div class="az-letter">T</div><div><div class="az-name">Transformer / Terminal Block</div><div class="az-desc">Transformer: Voltage step up/down. IS:4722. Terminal Block: DIN rail mount wire connections.</div></div></div>
+    <div class="az-card"><div class="az-letter">U</div><div><div class="az-name">UPS (Uninterruptible Power Supply)</div><div class="az-desc">Power failure pe backup. Online = zero switchover. Offline = 10-25ms. VA = Load ÷ PF.</div></div></div>
+    <div class="az-card"><div class="az-letter">V</div><div><div class="az-name">VFD (Variable Frequency Drive)</div><div class="az-desc">Motor speed control. 0-50Hz adjustable. 20-50% energy saving. Pumps, fans, compressors.</div></div></div>
+    <div class="az-card"><div class="az-letter">W</div><div><div class="az-name">Wire / Wago / Wire Loom</div><div class="az-desc">Wire: IS:694 domestic, IS:1554 industrial. Wago = Push-in connector. Wire Loom = Spiral wrap.</div></div></div>
+    <div class="az-card"><div class="az-letter">X</div><div><div class="az-name">XLPE Cable</div><div class="az-desc">Cross-Linked Polyethylene insulation. IS:7098. 90°C temp rating (vs 70°C PVC). Industrial power cables.</div></div></div>
+    <div class="az-card"><div class="az-letter">Y</div><div><div class="az-name">Y-Connection (Star)</div><div class="az-desc">3-Phase motor winding connection. 415V system mein phase voltage = 240V.</div></div></div>
+    <div class="az-card"><div class="az-letter">Z</div><div><div class="az-name">Zener Diode / Zigzag Transformer</div><div class="az-desc">Zener: Control circuit voltage regulation. Zigzag Transformer: Earthing transformer.</div></div></div>
+  </div>
+</div>
+
+<!-- MOCK TEST -->
+<div class="screen" id="s-quiz">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">Mock Test</div></div>
+  <div class="body"><div class="card" id="quiz-area"></div></div>
+</div>
+
+<!-- INTERVIEW TIPS -->
+<div class="screen" id="s-int-tips">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">Interview Tips</div></div>
+  <div class="body">
+    <div class="tipcard"><div class="tip-icon">👔</div><div><div class="tip-t">Professional Dikhna Zaroori</div><div class="tip-d">Saaf kapde, polished shoes. Pehla impression important hai.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">📋</div><div><div class="tip-t">Certificates Saath Rakho</div><div class="tip-d">ITI certificate, wireman license, experience letter — sab originals + photocopy.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🔧</div><div><div class="tip-t">Practical Knowledge Dikhao</div><div class="tip-d">Field examples do. "Maine XYZ project mein cable tray installation ki."</div></div></div>
+    <div class="tipcard"><div class="tip-icon">⚡</div><div><div class="tip-t">Safety Pehle Bolo</div><div class="tip-d">Koi bhi question mein safety mention karo. Employers safety-conscious logon ko prefer karte hain.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">❓</div><div><div class="tip-t">Pata Nahi Toh Honestly Bolo</div><div class="tip-d">"Mujhe exactly yaad nahi lekin IS code check karke confirm karunga." Galat jawab se behtar.</div></div></div>
+    <div class="tipcard"><div class="tip-icon">🌍</div><div><div class="tip-t">Gulf Ke Liye Extra</div><div class="tip-d">PTW aur LOTO ka knowledge. Basic English. NEBOSH, First Aid certificates extra value.</div></div></div>
+  </div>
+</div>
+
+<!-- SALARY -->
+<div class="screen" id="s-salary">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">Salary Guide</div></div>
+  <div class="body">
+    <div class="slabel">🇮🇳 India — Monthly</div>
+    <div class="sal-row"><div><div class="sal-t">Helper / Apprentice</div><div class="sal-s">0–2 years</div></div><div class="sal-v">₹8K–12K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Domestic Electrician</div><div class="sal-s">2–5 years</div></div><div class="sal-v">₹15K–25K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Industrial Electrician</div><div class="sal-s">3–7 years</div></div><div class="sal-v">₹20K–40K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Electrical Supervisor</div><div class="sal-s">7–12 years</div></div><div class="sal-v">₹35K–60K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Electrical Engineer</div><div class="sal-s">B.E / B.Tech</div></div><div class="sal-v">₹30K–80K</div></div>
+    <div class="slabel" style="margin-top:10px">🌍 Gulf — Monthly (INR equiv.)</div>
+    <div class="sal-row"><div><div class="sal-t">Electrician Helper</div><div class="sal-s">UAE/Qatar/Saudi</div></div><div class="sal-v">₹40K–55K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Electrician Skilled</div><div class="sal-s">3–7 years</div></div><div class="sal-v">₹60K–90K</div></div>
+    <div class="sal-row"><div><div class="sal-t">Electrical Foreman</div><div class="sal-s">8+ years</div></div><div class="sal-v">₹80K–1.2L</div></div>
+    <div class="sal-row"><div><div class="sal-t">Electrical Supervisor</div><div class="sal-s">10+ years</div></div><div class="sal-v">₹1L–1.8L</div></div>
+    <div class="sal-row"><div><div class="sal-t">ELV Specialist</div><div class="sal-s">CCTV/Fire Alarm</div></div><div class="sal-v">₹70K–1.5L</div></div>
+    <div class="ibox ib-yellow" style="margin-top:8px">💡 Gulf mein accommodation + food + transport often free — actual savings zyada.</div>
+  </div>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="screen" id="s-docs">
+  <div class="topnav"><button class="back-btn" onclick="go('s-int')">←</button><div class="nav-title">Documents Checklist</div></div>
+  <div class="body">
+    <div class="slabel">🇮🇳 India Interview</div>
+    <div class="ritem"><div><div class="ri-l">ITI Certificate</div><div class="ri-s">Original + photocopy</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">Wireman / Supervisor License</div><div class="ri-s">State electricity board</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">Experience Letters</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">Aadhar / PAN Card</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="slabel" style="margin-top:10px">🌍 Gulf — Extra Documents</div>
+    <div class="ritem"><div><div class="ri-l">Valid Passport</div><div class="ri-s">Min. 2 years validity</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">Attested Certificates</div><div class="ri-s">HRD + Embassy</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">Medical Fitness</div></div><div class="ri-r" style="color:var(--green)">✓ Must</div></div>
+    <div class="ritem"><div><div class="ri-l">First Aid Certificate</div></div><div class="ri-r" style="color:var(--primary2)">+ Value</div></div>
+    <div class="ritem"><div><div class="ri-l">NEBOSH / Safety Cert</div></div><div class="ri-r" style="color:var(--primary2)">+ Value</div></div>
+    <div class="ritem"><div><div class="ri-l">CompEx Certificate</div><div class="ri-s">Hazardous area work</div></div><div class="ri-r" style="color:var(--purple)">++ High</div></div>
+  </div>
+</div>
+
+<script>
+// SPLASH
+setTimeout(()=>{
+  const s=document.getElementById('splash');
+  s.style.transition='opacity .5s';s.style.opacity='0';
+  setTimeout(()=>s.style.display='none',500);
+},2600);
+
+// NAV
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// MODAL
+function openMenu(){document.getElementById('menu-modal').classList.add('open');}
+function closeMenuOut(e){if(e.target===document.getElementById('menu-modal'))closeMenu();}
+function closeMenu(){document.getElementById('menu-modal').classList.remove('open');}
+
+// SHARE
+function shareApp(){
+  if(navigator.share){navigator.share({title:'ElectroMind Pro',text:'Free electrician app — India & Gulf ke liye!',url:window.location.href});}
+  else{if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);alert('Link copy ho gaya! Doston ko bhejo 🙏');}
+}
+
+// ACCORDION
+function tog(el){
+  const a=el.nextElementSibling;
+  const isOpen=a.classList.contains('open');
+  document.querySelectorAll('.acc-a').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.acc-q .arr').forEach(x=>x.textContent='+');
+  if(!isOpen){a.classList.add('open');el.querySelector('.arr').textContent='−';}
+}
+
+// CALCULATORS
+const cccTable={cu:{1.5:14,2.5:19,4:25,6:32,10:44,16:58,25:76,35:94,50:113,70:142,95:171,120:197,150:223,185:253,240:296},al:{1.5:11,2.5:15,4:20,6:26,10:36,16:46,25:59,35:73,50:89,70:110,95:133,120:153,150:173,185:196,240:230}};
+function calcCCC(){
+  const sz=parseFloat(document.getElementById('ccc-size').value);
+  const mat=document.getElementById('ccc-mat').value;
+  const temp=parseFloat(document.getElementById('ccc-temp').value);
+  const base=cccTable[mat][sz];
+  const d=Math.round(base*temp);
+  document.getElementById('ccc-res').style.display='block';
+  document.getElementById('ccc-v').textContent=d+' Amperes';
+  document.getElementById('ccc-n').textContent=`Base: ${base}A | Derated: ${d}A`;
+}
+
+function calcMotor(){
+  let kw=parseFloat(document.getElementById('mot-kw').value);
+  if(!kw){alert('Motor power daalo');return;}
+  if(document.getElementById('mot-unit').value==='hp')kw*=0.746;
+  const volt=parseInt(document.getElementById('mot-v').value);
+  let method,reason;
+  if(kw<=3.7){method='DOL Starter';reason='5HP tak — simple & cheap';}
+  else if(kw<=37){method='Star-Delta Starter';reason='5–50HP range — standard';}
+  else{method='VFD / Soft Starter';reason='Large motors — smooth start';}
+  const curr=volt===415?kw*1000/(1.732*415*0.85):kw*1000/(230*0.85);
+  const fla=Math.ceil(curr*1.1);
+  const c=[9,12,18,25,32,40,50,65,100].find(x=>x>=fla)||100;
+  document.getElementById('mot-res').style.display='block';
+  document.getElementById('mot-method').textContent=method;
+  document.getElementById('mot-reason').textContent=reason;
+  document.getElementById('mot-details').innerHTML=`<div class="ritem"><div class="ri-l">Full Load Amps</div><div class="ri-r" style="color:var(--primary2)">${fla} A</div></div><div class="ritem"><div class="ri-l">Contactor Rating</div><div class="ri-r" style="color:var(--green)">${c} A</div></div><div class="ritem"><div class="ri-l">Motor</div><div class="ri-r" style="color:var(--orange)">${kw.toFixed(1)} kW / ${(kw/0.746).toFixed(1)} HP</div></div>`;
+}
+
+function calcTrafo(){
+  const kw=parseFloat(document.getElementById('tf-kw').value);
+  if(!kw){alert('Load daalo');return;}
+  const req=(kw*parseFloat(document.getElementById('tf-df').value)/parseFloat(document.getElementById('tf-pf').value))*parseFloat(document.getElementById('tf-fx').value);
+  const sel=[25,63,100,160,200,250,315,400,500,630,800,1000,1250,1600].find(k=>k>=req)||1600;
+  document.getElementById('tf-res').style.display='block';
+  document.getElementById('tf-v').textContent=sel+' KVA';
+  document.getElementById('tf-n').textContent=`Required: ${req.toFixed(1)} KVA → Standard: ${sel} KVA`;
+}
+
+function calcOhm(){
+  const v=document.getElementById('o-v').value,i=document.getElementById('o-i').value,r=document.getElementById('o-r').value;
+  const V=parseFloat(v),I=parseFloat(i),R=parseFloat(r);
+  let rv='',rn='',rl='';
+  if(v===''&&i&&r){const c=I*R;rl='Voltage (V)';rv=c.toFixed(2)+' V';rn=`P = ${(c*I).toFixed(2)} W`;}
+  else if(i===''&&v&&r){const c=V/R;rl='Current (I)';rv=c.toFixed(3)+' A';rn=`P = ${(V*c).toFixed(2)} W`;}
+  else if(r===''&&v&&i){const c=V/I;rl='Resistance (R)';rv=c.toFixed(2)+' Ω';rn=`P = ${(V*I).toFixed(2)} W`;}
+  else{alert('Do values daalo');return;}
+  document.getElementById('ohm-res').style.display='block';
+  document.getElementById('ohm-lbl').textContent=rl;
+  document.getElementById('ohm-v').textContent=rv;
+  document.getElementById('ohm-p').textContent=rn;
+}
+
+function calcPF(){
+  const kw=parseFloat(document.getElementById('pf-kw').value);
+  const ex=parseFloat(document.getElementById('pf-exist').value);
+  const tg=parseFloat(document.getElementById('pf-target').value);
+  if(!kw||!ex||!tg){alert('Sab values daalo');return;}
+  const kVAR=kw*(Math.tan(Math.acos(ex))-Math.tan(Math.acos(tg)));
+  document.getElementById('pf-res').style.display='block';
+  document.getElementById('pf-v2').textContent=kVAR.toFixed(1)+' kVAR';
+  document.getElementById('pf-n').textContent=`PF ${ex} se ${tg} karne ke liye ${kVAR.toFixed(1)} kVAR capacitor chahiye`;
+}
+
+function genBill(){
+  const name=document.getElementById('b-name').value||'Customer';
+  const job=document.getElementById('b-job').value||'Electrical Work';
+  const mat=parseFloat(document.getElementById('b-mat').value)||0;
+  const lab=parseFloat(document.getElementById('b-lab').value)||0;
+  const gst=parseFloat(document.getElementById('b-gst').value);
+  const sub=mat+lab,gstAmt=sub*gst/100,total=sub+gstAmt;
+  const now=new Date();
+  document.getElementById('b-date').textContent=`${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()}`;
+  document.getElementById('b-header').innerHTML=`<strong>Customer:</strong> ${name}<br><strong>Job:</strong> ${job}`;
+  document.getElementById('b-rows').innerHTML=`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span>Material</span><span>₹${mat.toLocaleString('en-IN')}</span></div><div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px"><span>Labour</span><span>₹${lab.toLocaleString('en-IN')}</span></div>${gst>0?`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2)"><span>GST ${gst}%</span><span>₹${Math.round(gstAmt).toLocaleString('en-IN')}</span></div>`:''}`;
+  document.getElementById('b-total').textContent='₹'+Math.round(total).toLocaleString('en-IN');
+  document.getElementById('bill-out').style.display='block';
+}
+
+// MOCK TEST
+const questions=[
+  {q:"Ohm's Law formula kya hai?",opts:["V = I + R","V = I × R","V = I / R","V = I² × R"],ans:1},
+  {q:"Star-Delta starter mein starting voltage?",opts:["100%","57.7%","50%","33%"],ans:1},
+  {q:"Cable tray fill factor?",opts:["60%","50%","40%","30%"],ans:2},
+  {q:"India mein Earth wire ka color?",opts:["Green","Yellow","Green-Yellow","Black"],ans:2},
+  {q:"MCB full form?",opts:["Main Circuit Breaker","Miniature Circuit Breaker","Motor Control Board","Main Control Box"],ans:1},
+  {q:"Gulf mein LOTO ka matlab?",opts:["Load On Turn Off","Lock Out Tag Out","Line Out Turn On","Lock Off Tag On"],ans:1},
+  {q:"RCCB human life protect karta hai?",opts:["100 mA","300 mA","30 mA","500 mA"],ans:2},
+  {q:"Industrial earthing resistance?",opts:["<5 Ω","<3 Ω","<2 Ω","<10 Ω"],ans:2},
+  {q:"IEC standard L1 Phase color?",opts:["Red","Brown","Yellow","Grey"],ans:1},
+  {q:"PTW full form?",opts:["Power Transfer Wire","Permit to Work","Panel Terminal Wiring","Phase To Wire"],ans:1},
+  {q:"VFD ka kaam?",opts:["Voltage badhaana","Motor speed control","Current measure","MCB replace"],ans:1},
+  {q:"Electrical fire pe kya use?",opts:["Water","Foam","CO₂ / Dry Powder","Sand"],ans:2},
+  {q:"Power Factor = ?",opts:["kW / kVAR","kW / kVA","kVA / kW","kVAR / kVA"],ans:1},
+  {q:"DOL starter kitne HP tak?",opts:["2 HP","5 HP","10 HP","20 HP"],ans:1},
+  {q:"IS:3043 kis cheez ka standard?",opts:["Wiring","Earthing","Cable","Circuit Breaker"],ans:1},
+  {q:"SWA cable mein S ka matlab?",opts:["Single","Steel","Solid","Stranded"],ans:1},
+  {q:"Insulation resistance minimum?",opts:["0.1 MΩ","0.5 MΩ","1 MΩ","10 MΩ"],ans:2},
+  {q:"MCCB full form?",opts:["Main Circuit Control Board","Moulded Case Circuit Breaker","Motor Control Circuit Breaker","Main Control Circuit Box"],ans:1},
+  {q:"Copper busbar safe current density?",opts:["0.5 A/mm²","1.0 A/mm²","1.5 A/mm²","3.0 A/mm²"],ans:2},
+  {q:"DEWA kahan ki authority hai?",opts:["Abu Dhabi","Dubai","Sharjah","Qatar"],ans:1},
+  {q:"XLPE insulation temperature rating?",opts:["70°C","80°C","90°C","100°C"],ans:2},
+  {q:"Residential earthing resistance?",opts:["<1 Ω","<2 Ω","<5 Ω","<10 Ω"],ans:2},
+  {q:"Ghar mein lighting circuit MCB?",opts:["16A","10A","6A","20A"],ans:2},
+  {q:"Cable gland M25 ka OD range?",opts:["4-8 mm","6-12 mm","10-18 mm","20-30 mm"],ans:2},
+  {q:"HRC fuse mein H ka matlab?",opts:["Heavy","High","Hard","Hot"],ans:1},
+];
+let qi=0,score=0,answered=false;
+function startQuiz(){qi=0;score=0;answered=false;go('s-quiz');renderQ();}
+function renderQ(){
+  if(qi>=questions.length){
+    const pct=Math.round(score/questions.length*100);
+    const msg=pct>=80?'🏆 Excellent! Interview ready ho!':pct>=60?'👍 Good! Thoda aur practice karo':'📚 Revision karo — dobara try karo';
+    document.getElementById('quiz-area').innerHTML=`<div style="text-align:center;padding:24px 0"><div style="font-family:Poppins;font-size:60px;font-weight:800;color:var(--primary)">${score}<span style="font-size:28px;color:var(--text3)">/${questions.length}</span></div><div style="font-family:Poppins;font-size:22px;font-weight:700;margin:6px 0;color:var(--primary)">${pct}%</div><div style="font-size:13px;color:var(--text2);margin-bottom:22px">${msg}</div><button class="btn" onclick="startQuiz()">Dobara Test Do</button><button class="btn2" onclick="go('s-int')">Back to Menu</button></div>`;
+    return;
+  }
+  const q=questions[qi];answered=false;
+  document.getElementById('quiz-area').innerHTML=`<div class="qprog">Question ${qi+1} of ${questions.length} · Score: ${score}</div><div class="qbar"><div class="qfill" style="width:${qi/questions.length*100}%"></div></div><div class="qq">${q.q}</div>${q.opts.map((o,i)=>`<button class="qopt" id="opt${i}" onclick="checkAns(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}`;
+}
+function checkAns(sel){
+  if(answered)return;answered=true;
+  const q=questions[qi];
+  document.querySelectorAll('.qopt').forEach((b,i)=>{b.disabled=true;if(i===q.ans)b.classList.add('correct');else if(i===sel&&sel!==q.ans)b.classList.add('wrong');});
+  if(sel===q.ans)score++;
+  setTimeout(()=>{qi++;renderQ();},1300);
+}
+</script>
+</body>
+</html>
