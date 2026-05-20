@@ -9,15 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Install Gradle
+        run: |
+          wget https://services.gradle.org/distributions/gradle-8.4-bin.zip
+          unzip gradle-8.4-bin.zip
+          export PATH=$PATH:$PWD/gradle-8.4/bin
+
       - name: Build AAB
         working-directory: android
         run: |
-          chmod +x gradlew
-          ./gradlew bundleRelease
+          export PATH=$PATH:$PWD/../gradle-8.4/bin
+          gradle bundleRelease
+
       - uses: actions/upload-artifact@v4
         with:
           name: app-release
